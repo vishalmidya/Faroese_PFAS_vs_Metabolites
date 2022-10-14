@@ -5,6 +5,8 @@ library(MatchIt)
 
 sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
+merged_omics <- read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
+
 m.out1.pfos0_age7 <- matchit(cpfos0 ~  sex + mage  + cmatfishpreg  + cparity + age7, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
                              distance = "glm", caliper = 0.5)
@@ -43,19 +45,19 @@ f <- love.plot(m.out1.pfos0_age28)
 f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , linetype="dotted",  color = "black", size=1.5) + geom_vline(xintercept  = -0.1 , linetype="dotted", color = "black", size=1.5)
 
 m.out1.pfos0_age7.matched <- match.data(m.out1.pfos0_age7)
-write.csv(m.out1.pfos0_age7.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos at age 0/minerva_data_pfos_0_metabolite_7/matched_data_pfos_at_0_met_at_7.csv",
+write.csv(m.out1.pfos0_age7.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos_0/minerva_data_pfos_0_metabolite_7/matched_data_pfos_at_0_met_at_7.csv",
           row.names = F)
 
 m.out1.pfos0_age14.matched <- match.data(m.out1.pfos0_age14)
-write.csv(m.out1.pfos0_age14.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos at age 0/minerva_data_pfos_0_metabolite_14/matched_data_pfos_at_0_met_at_14.csv",
+write.csv(m.out1.pfos0_age14.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos_0/minerva_data_pfos_0_metabolite_14/matched_data_pfos_at_0_met_at_14.csv",
           row.names = F)
 
 m.out1.pfos0_age22.matched <- match.data(m.out1.pfos0_age22)
-write.csv(m.out1.pfos0_age22.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos at age 0/minerva_data_pfos_0_metabolite_22/matched_data_pfos_at_0_met_at_22.csv",
+write.csv(m.out1.pfos0_age22.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos_0/minerva_data_pfos_0_metabolite_22/matched_data_pfos_at_0_met_at_22.csv",
           row.names = F)
 
 m.out1.pfos0_age28.matched <- match.data(m.out1.pfos0_age28)
-write.csv(m.out1.pfos0_age28.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos at age 0/minerva_data_pfos_0_metabolite_28/matched_data_pfos_at_0_met_at_28.csv",
+write.csv(m.out1.pfos0_age28.matched, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/pfos/pfos_0/minerva_data_pfos_0_metabolite_28/matched_data_pfos_at_0_met_at_28.csv",
           row.names = F)
 
 
