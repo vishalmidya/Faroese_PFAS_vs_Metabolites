@@ -66,16 +66,16 @@ setwd("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METAB
 
 # Always start with renv to capture generate workflow
 
-renv::init()
+# renv::init()
 
 # Epi data
 
-d <- as.data.frame(read.csv("17.12.19_December2020.csv"))
+d <- as.data.frame(read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/17.12.19_December2020.csv"))
 d$id <- as.character(d$id)
 
 # 500 ids that were eligible 
 
-d1 <- as.data.frame(read.csv("eligible_ids.csv"))
+d1 <- as.data.frame(read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/eligible_ids.csv"))
 d1$id <- as.character(as.numeric(as.character(d1$id)))
 
 # Match the eligible ids with epi data
@@ -506,8 +506,6 @@ merged_omics$Peptides <- rowMeans(merged_omics[,colnames(merged_omics) %in% c(da
 merged_omics$Phytochemical <- rowMeans(merged_omics[,colnames(merged_omics) %in% c(data_hilic$Met_id[data_hilic$Class == "Phytochemical compounds"])])
 merged_omics$Vitamins <- rowMeans(merged_omics[,colnames(merged_omics) %in% c(data_hilic$Met_id[data_hilic$Class == "Vitamins and Cofactors"])])
 
-
-
 merged_omics$age7 <- merged_omics$age_7
 merged_omics$age14 <- merged_omics$age_14
 
@@ -515,6 +513,9 @@ dim(merged_omics[merged_omics$Year == 7,(colnames(merged_omics) %in% c(data_hili
 dim(merged_omics[merged_omics$Year == 14,(colnames(merged_omics) %in% c(data_hilic$Met_id[order(data_hilic$Class,data_hilic$Met_id)]))])
 dim(merged_omics[merged_omics$Year == 22,(colnames(merged_omics) %in% c(data_hilic$Met_id[order(data_hilic$Class,data_hilic$Met_id)]))])
 dim(merged_omics[merged_omics$Year == 28,(colnames(merged_omics) %in% c(data_hilic$Met_id[order(data_hilic$Class,data_hilic$Met_id)]))])
+
+# write.csv(merged_omics, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/merged_omics_hilic.csv", row.names = F)
+
 
 
 # Extra codes for fun
