@@ -59,10 +59,12 @@ library(renv)
 
 # Always start with renv to capture generate workflow
 
+# hfhfhfhfhf
+
 renv::init()
 
 
-setwd("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC")
+setwd("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/Faroese_PFAS_vs_Metabolites")
 
 # Epi data
 
