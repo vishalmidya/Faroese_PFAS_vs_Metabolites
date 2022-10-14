@@ -57,12 +57,16 @@ library(data.table)
 library(omu)
 library(renv)
 
+# Set working directory in local repository
+
+# DDD
+
+setwd("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/git/Faroese_PFAS_vs_Metabolites/HILIC")
+
+
 # Always start with renv to capture generate workflow
 
 renv::init()
-
-
-setwd("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC")
 
 # Epi data
 
