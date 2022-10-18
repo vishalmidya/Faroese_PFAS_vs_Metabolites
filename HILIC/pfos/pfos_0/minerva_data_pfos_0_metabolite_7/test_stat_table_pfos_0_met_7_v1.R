@@ -7,7 +7,7 @@ library(data.table)
 
 
 cores=detectCores()
-cl <- makeCluster(15) 
+cl <- makeCluster(10) 
 registerDoParallel(cl)
 
 start.time <- Sys.time()
@@ -18,7 +18,7 @@ m.out1.pfos0_age7.matched <- read.csv("/sc/arion/work/midyav01/faroese/pfos/age0
 
 data = m.out1.pfos0_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfos0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
-iterations = 50000
+iterations = 1000
 data.pfos.0.met_at_7 <- cbind(data_hilic[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
 data.pfos.0.met_at_7$beta <- rep(NA_real_, nrow(data.pfos.0.met_at_7))
 data.pfos.0.met_at_7$model_pval <- rep(NA_real_, nrow(data.pfos.0.met_at_7))
