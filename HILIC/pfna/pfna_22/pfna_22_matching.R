@@ -14,31 +14,31 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 22
-m.out1.pfda22_age22 <- matchit(cpfda22 ~ mage + smokepreg_2 + cmatfishpreg + cparity, 
+m.out1.pfna22_age22 <- matchit(cpfna22 ~ sex + mage + mbmi  + smokepreg_2, 
                                data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
-                               distance = "glm", caliper = 0.1)
+                               distance = "glm", caliper = 0.4)
 
-summary(m.out1.pfda22_age22)
-f <- love.plot(m.out1.pfda22_age22)
+summary(m.out1.pfna22_age22)
+f <- love.plot(m.out1.pfna22_age22)
 f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , linetype="dotted",  color = "black", size=1.5) + geom_vline(xintercept  = -0.1 , linetype="dotted", color = "black", size=1.5)
 
 #---------------------------  at age 28
-m.out1.pfda22_age28 <- matchit(cpfda22 ~ sex + mage + mbmi  + smokepreg_2  + cparity + age28, 
+m.out1.pfna22_age28 <- matchit(cpfna22 ~ sex  + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
                                data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                                distance = "glm", caliper = 0.4)
 
-summary(m.out1.pfda22_age28)
-f <- love.plot(m.out1.pfda22_age28)
+summary(m.out1.pfna22_age28)
+f <- love.plot(m.out1.pfna22_age28)
 f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , linetype="dotted",  color = "black", size=1.5) + geom_vline(xintercept  = -0.1 , linetype="dotted", color = "black", size=1.5)
 
 
 ## export matched data
-m.out1.pfda22_age22.matched <- match.data(m.out1.pfda22_age22)
-write.csv(m.out1.pfda22_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfda/pfda_22/minerva_data_pfda_22_metabolite_22/matched_data_pfda_at_22_met_at_22.csv",
+m.out1.pfna22_age22.matched <- match.data(m.out1.pfna22_age22)
+write.csv(m.out1.pfna22_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfna/pfna_22/minerva_data_pfna_22_metabolite_22/matched_data_pfna_at_22_met_at_22.csv",
           row.names = F)
 
-m.out1.pfda22_age28.matched <- match.data(m.out1.pfda22_age28)
-write.csv(m.out1.pfda22_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfda/pfda_22/minerva_data_pfda_22_metabolite_28/matched_data_pfda_at_22_met_at_28.csv",
+m.out1.pfna22_age28.matched <- match.data(m.out1.pfna22_age28)
+write.csv(m.out1.pfna22_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfna/pfna_22/minerva_data_pfna_22_metabolite_28/matched_data_pfna_at_22_met_at_28.csv",
           row.names = F)
 
 
