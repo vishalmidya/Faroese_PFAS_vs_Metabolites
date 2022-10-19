@@ -4,6 +4,9 @@ library(car)
 library(MASS)
 library(ggplot2)
 library(data.table)
+library(iterators)
+library(parallel)
+library(carData)
 
 
 cores=detectCores()
@@ -12,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_hilic <- read.csv("/sc/arion/work/midyav01/new_faroese/hilic/data_hilic.csv", check.names = F)
-m.out1.pfos0_age7.matched <- read.csv("/sc/arion/work/midyav01/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolite_7/matched_data_pfos_at_0_met_at_7.csv")
+data_hilic <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/data_hilic.csv", check.names = F)
+m.out1.pfos0_age7.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/matched_data_pfos_at_0_met_at_7.csv")
 
 data = m.out1.pfos0_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfos0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
@@ -70,7 +73,7 @@ p_values <- foreach(p = 1:dim(data.pfos.0.met_at_7)[1], .combine = 'c') %dopar% 
 }
 data.pfos.0.met_at_7$simu_pval <- p_values
 
-write.table(data.pfos.0.met_at_7,"/sc/arion/work/midyav01/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolite_7/pfos_0_met_7_beta_fisher.txt", row.names = FALSE)
+write.table(data.pfos.0.met_at_7,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_beta_fisher.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
