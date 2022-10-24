@@ -48,7 +48,7 @@ observed_test_stat <- unlist(oper[[1]])
 
 # Fisher p-value
 
-iterations = 5000
+iterations = 20000
 test_stat <- rep(NA_real_, iterations)
 
 set.seed(runif(1,0,1e4))
@@ -68,12 +68,15 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
+write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_14/pfos_0_met_14_hypothetical_test_stat_hilic.txt", row.names = FALSE)
+
+
 p_values <- foreach(p = 1:dim(data.pfos.0.met_at_14)[1], .combine = 'c') %dopar% {
   mean(abs(test_stat_table[,p]) >= abs(observed_test_stat[p]))
 }
 data.pfos.0.met_at_14$simu_pval <- p_values
 
-write.table(data.pfos.0.met_at_14,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_14/pfos_0_met_14_beta_fisher.txt", row.names = FALSE)
+write.table(data.pfos.0.met_at_14,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_14/pfos_0_met_14_beta_fisher_hilic.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
