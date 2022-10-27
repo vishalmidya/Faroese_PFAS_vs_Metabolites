@@ -7,14 +7,14 @@ library(cobalt)
 library(tidyverse)
 
 ## import data
-merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
+merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/merged_omics_c18.csv", check.names = F)
 
 
 ## all covariates: sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
 ## matching
 #---------------------------  at age 14
-m.out1.pfoa14_age14 <- matchit(cpfoa14 ~  sex + mage + mbmi  + smokepreg_2  + cparity,
+m.out1.pfoa14_age14 <- matchit(cpfoa14 ~ sex + mage + mbmi  + smokepreg_2  + cparity + age14,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.1)
 
@@ -24,7 +24,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfoa14_age22 <- matchit(cpfoa14 ~  mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age22, 
+m.out1.pfoa14_age22 <- matchit(cpfoa14 ~   mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age22, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.5)
 
@@ -36,7 +36,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 #---------------------------  at age 28
 m.out1.pfoa14_age28 <- matchit(cpfoa14 ~ sex + mage + mbmi + cmatfishpreg  + cparity + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.4)
+                              distance = "glm", caliper = 0.1)
 
 summary(m.out1.pfoa14_age28)
 f <- love.plot(m.out1.pfoa14_age28)
@@ -45,15 +45,15 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfoa14_age14.matched <- match.data(m.out1.pfoa14_age14)
-write.csv(m.out1.pfoa14_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_14/matched_data_pfoa_at_14_met_at_14.csv",
+write.csv(m.out1.pfoa14_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_14/matched_data_pfoa_at_14_met_at_14.csv",
           row.names = F)
 
 m.out1.pfoa14_age22.matched <- match.data(m.out1.pfoa14_age22)
-write.csv(m.out1.pfoa14_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_22/matched_data_pfoa_at_14_met_at_22.csv",
+write.csv(m.out1.pfoa14_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_22/matched_data_pfoa_at_14_met_at_22.csv",
           row.names = F)
 
 m.out1.pfoa14_age28.matched <- match.data(m.out1.pfoa14_age28)
-write.csv(m.out1.pfoa14_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_28/matched_data_pfoa_at_14_met_at_28.csv",
+write.csv(m.out1.pfoa14_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolite_28/matched_data_pfoa_at_14_met_at_28.csv",
           row.names = F)
 
 
