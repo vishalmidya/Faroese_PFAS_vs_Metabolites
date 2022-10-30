@@ -7,14 +7,14 @@ library(cobalt)
 library(tidyverse)
 
 ## import data
-merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
+merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/merged_omics_c18.csv", check.names = F)
 
 
 ## all covariates: sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
 ## matching
 #---------------------------  at age 28
-m.out1.pfna28_age28 <- matchit(cpfna28 ~ mbmi  + smokepreg_2 + cmatfishpreg  , 
+m.out1.pfna28_age28 <- matchit(cpfna28 ~ sex + mbmi  + smokepreg_2  + cparity , 
                                data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                                distance = "glm", caliper = 0.5)
 
@@ -25,7 +25,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfna28_age28.matched <- match.data(m.out1.pfna28_age28)
-write.csv(m.out1.pfna28_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfna/pfna_28/minerva_data_pfna_28_metabolite_28/matched_data_pfna_at_28_met_at_28.csv",
+write.csv(m.out1.pfna28_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfna/pfna_28/minerva_data_pfna_28_metabolite_28/matched_data_pfna_at_28_met_at_28.csv",
           row.names = F)
 
 
