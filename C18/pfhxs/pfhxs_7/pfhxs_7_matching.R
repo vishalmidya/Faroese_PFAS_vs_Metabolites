@@ -7,16 +7,16 @@ library(cobalt)
 library(tidyverse)
 
 ## import data
-merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
+merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/merged_omics_c18.csv", check.names = F)
 
 
 ## all covariates: sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
 ## matching
 #---------------------------  at age 7
-m.out1.pfhxs7_age7 <- matchit(cpfhxs7 ~  mage + mbmi  + smokepreg_2 +age7, 
+m.out1.pfhxs7_age7 <- matchit(cpfhxs7 ~ mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
-                             distance = "glm", caliper = 0.5)
+                             distance = "glm", caliper = 0.2)
 
 summary(m.out1.pfhxs7_age7)
 f <- love.plot(m.out1.pfhxs7_age7)
@@ -35,7 +35,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfhxs7_age22 <- matchit(cpfhxs7 ~  sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + age22, 
+m.out1.pfhxs7_age22 <- matchit(cpfhxs7 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + age22, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.1)
 
@@ -45,7 +45,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfhxs7_age28 <- matchit(cpfhxs7 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
+m.out1.pfhxs7_age28 <- matchit(cpfhxs7 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity  + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.4)
 
@@ -56,19 +56,19 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfhxs7_age7.matched <- match.data(m.out1.pfhxs7_age7)
-write.csv(m.out1.pfhxs7_age7.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_7/matched_data_pfhxs_at_7_met_at_7.csv",
+write.csv(m.out1.pfhxs7_age7.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_7/matched_data_pfhxs_at_7_met_at_7.csv",
           row.names = F)
 
 m.out1.pfhxs7_age14.matched <- match.data(m.out1.pfhxs7_age14)
-write.csv(m.out1.pfhxs7_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_14/matched_data_pfhxs_at_7_met_at_14.csv",
+write.csv(m.out1.pfhxs7_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_14/matched_data_pfhxs_at_7_met_at_14.csv",
           row.names = F)
 
 m.out1.pfhxs7_age22.matched <- match.data(m.out1.pfhxs7_age22)
-write.csv(m.out1.pfhxs7_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_22/matched_data_pfhxs_at_7_met_at_22.csv",
+write.csv(m.out1.pfhxs7_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_22/matched_data_pfhxs_at_7_met_at_22.csv",
           row.names = F)
 
 m.out1.pfhxs7_age28.matched <- match.data(m.out1.pfhxs7_age28)
-write.csv(m.out1.pfhxs7_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_28/matched_data_pfhxs_at_7_met_at_28.csv",
+write.csv(m.out1.pfhxs7_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolite_28/matched_data_pfhxs_at_7_met_at_28.csv",
           row.names = F)
 
 
