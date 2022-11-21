@@ -18,7 +18,7 @@ start.time <- Sys.time()
 data_hilic <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/data_hilic.csv", check.names = F)
 m.out1.pfhxs_14_age14.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_14/matched_data_pfhxs_at_14_met_at_14.csv")
 
-data = m.out1.pfhxs_14_age14.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfhxs_14', 'sex',
+data = m.out1.pfhxs_14_age14.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfhxs14', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age14' )]
 
 data.pfhxs_14.met_at_14 <- cbind(data_hilic[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
@@ -36,7 +36,7 @@ comb <- function(x, ...) {
 oper <- foreach(i=1:nrow(data.pfhxs_14.met_at_14), .combine='comb', .multicombine=TRUE,
                 .init=list(list(), list())) %dopar% {
                   exposure <- paste0("Met",i)
-                  model <- (lm(data[,i] ~ cpfhxs_14 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14, data = data))
+                  model <- (lm(data[,i] ~ cpfhxs14 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14, data = data))
                   s <- summary(model)
                   list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"])
                 }
@@ -55,7 +55,7 @@ set.seed(runif(1,0,1e4))
 data_permuted <- data
 system.time(test_stat <- foreach(i=1:nrow(data.pfhxs_14.met_at_14), .combine='rbind', .multicombine=TRUE) %:% 
               foreach(j = 1:iterations, .combine = 'c') %dopar% {
-                f_perm <- lm(sample(data_permuted[,i]) ~ cpfhxs_14 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14, data=data_permuted)
+                f_perm <- lm(sample(data_permuted[,i]) ~ cpfhxs14 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14, data=data_permuted)
                 s_f_perm <- summary(f_perm)
                 s_f_perm$coefficients[2,"Estimate"]
                 
