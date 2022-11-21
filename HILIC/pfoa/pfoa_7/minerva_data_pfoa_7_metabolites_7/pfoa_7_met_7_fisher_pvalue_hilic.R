@@ -18,7 +18,7 @@ start.time <- Sys.time()
 data_hilic <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/data_hilic.csv", check.names = F)
 m.out1.pfoa_7_age7.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_7/matched_data_pfoa_at_7_met_at_7.csv")
 
-data = m.out1.pfoa_7_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfoa_7', 'sex',
+data = m.out1.pfoa_7_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfoa7', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
 
 data.pfoa_7.met_at_7 <- cbind(data_hilic[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
@@ -36,7 +36,7 @@ comb <- function(x, ...) {
 oper <- foreach(i=1:nrow(data.pfoa_7.met_at_7), .combine='comb', .multicombine=TRUE,
                 .init=list(list(), list())) %dopar% {
                   exposure <- paste0("Met",i)
-                  model <- (lm(data[,i] ~ cpfoa_7 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data = data))
+                  model <- (lm(data[,i] ~ cpfoa7 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data = data))
                   s <- summary(model)
                   list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"])
                 }
@@ -55,7 +55,7 @@ set.seed(runif(1,0,1e4))
 data_permuted <- data
 system.time(test_stat <- foreach(i=1:nrow(data.pfoa_7.met_at_7), .combine='rbind', .multicombine=TRUE) %:% 
               foreach(j = 1:iterations, .combine = 'c') %dopar% {
-                f_perm <- lm(sample(data_permuted[,i]) ~ cpfoa_7 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data=data_permuted)
+                f_perm <- lm(sample(data_permuted[,i]) ~ cpfoa7 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data=data_permuted)
                 s_f_perm <- summary(f_perm)
                 s_f_perm$coefficients[2,"Estimate"]
                 
