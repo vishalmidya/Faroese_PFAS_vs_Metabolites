@@ -1,0 +1,69 @@
+library(foreach)
+library(doParallel)
+library(car)
+library(MASS)
+library(ggplot2)
+library(data.table)
+
+cl <- makeCluster(10) 
+registerDoParallel(cl)
+
+start.time <- Sys.time()
+
+d3 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_hypothetical_test_stat_hilic.txt")
+
+d7 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_hypothetical_test_stat_c18.txt")
+d8 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_hypothetical_test_stat_c18.txt")
+
+test_stat_table <- as.data.frame(cbind(d3,d4, d7,d8))
+
+
+p3 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_beta_fisher_hilic.txt")
+p4 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_beta_fisher_hilic.txt")
+
+p7 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_beta_fisher_c18.txt")
+p8 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_beta_fisher_c18.txt")
+
+fisher_p_val <- c(p3$simu_pval,p4$simu_pval,
+                  
+                  p7$simu_pval,p8$simu_pval)
+
+
+hyp_p_val <- foreach(r = 1:ncol(test_stat_table), .combine = 'cbind') %dopar% {
+  1 - rank(abs(test_stat_table[,r]))/nrow(test_stat_table) + 1/nrow(test_stat_table)
+}
+hyp_p_val <- as.data.frame(hyp_p_val)
+
+
+min_p_nrep <- foreach(p = 1:dim(hyp_p_val)[1], .combine = 'c') %dopar% {
+  min(hyp_p_val[p,], na.rm = T)
+}
+
+write.table(hyp_p_val,"/sc/arion/work/yaom03/new_faroese/combined_pvalues/randomized_adj_pvalues/pfos/pfos_14/pfos_14_hypothetical_pval.txt", row.names = FALSE)
+
+# calculate the proportion of min_p_nrep that is sm/eq. p_value (for obs.)
+adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
+  mean(min_p_nrep <= fisher_p_val[i])
+}
+
+p3$rand_adj_pval <- adj_pval[1:length(p3$simu_pval)]
+p4$rand_adj_pval <- adj_pval[(1*length(p3$simu_pval)+1): 2*length(p3$simu_pval)]
+
+p7$rand_adj_pval <- adj_pval[(2*length(p3$simu_pval)+1): (2*length(p3$simu_pval) + length(p7$simu_pval))]
+p8$rand_adj_pval <- adj_pval[((2*length(p3$simu_pval) + 1*length(p7$simu_pval))+1): (2*length(p3$simu_pval) + 2*length(p7$simu_pval))]
+
+
+write.table(p3,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(p4,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_beta_fisher_hilic.txt", row.names = FALSE)
+
+write.table(p7,"/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_beta_fisher_c18.txt", row.names = FALSE)
+write.table(p8,"/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_14/minerva_data_pfos_14_metabolites_28/pfos_14_met_28_beta_fisher_c18.txt", row.names = FALSE)
+
+end.time <- Sys.time()
+(time.taken <- end.time - start.time)
+
+stopCluster(cl)
+
+
+

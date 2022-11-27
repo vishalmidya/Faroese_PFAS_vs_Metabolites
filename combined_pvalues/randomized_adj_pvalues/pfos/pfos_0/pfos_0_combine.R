@@ -5,7 +5,7 @@ library(MASS)
 library(ggplot2)
 library(data.table)
 
-cl <- makeCluster(10) 
+cl <- makeCluster(15) 
 registerDoParallel(cl)
 
 start.time <- Sys.time()
