@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_hilic <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/data_hilic.csv", check.names = F)
-m.out1.pfda_28_age28.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/matched_data_pfda_at_28_met_at_28.csv")
+data_hilic <- read.csv("/sc/arion/projects/Faroese/hilic/data_hilic.csv", check.names = F)
+m.out1.pfda_28_age28.matched <- read.csv("/sc/arion/projects/Faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/matched_data_pfda_at_28_met_at_28.csv")
 
 data = m.out1.pfda_28_age28.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfda28', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age28' )]
@@ -68,7 +68,7 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
-write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/pfda_28_met_28_hypothetical_test_stat_hilic.txt", row.names = FALSE)
+write.table(test_stat_table,"/sc/arion/projects/Faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/pfda_28_met_28_hypothetical_test_stat_hilic.txt", row.names = FALSE)
 
 
 p_values <- foreach(p = 1:dim(data.pfda_28.met_at_28)[1], .combine = 'c') %dopar% {
@@ -76,7 +76,7 @@ p_values <- foreach(p = 1:dim(data.pfda_28.met_at_28)[1], .combine = 'c') %dopar
 }
 data.pfda_28.met_at_28$simu_pval <- p_values
 
-write.table(data.pfda_28.met_at_28,"/sc/arion/work/yaom03/new_faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/pfda_28_met_28_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(data.pfda_28.met_at_28,"/sc/arion/projects/Faroese/hilic/pfda/pfda_28/minerva_data_pfda_28_metabolites_28/pfda_28_met_28_beta_fisher_hilic.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
