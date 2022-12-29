@@ -51,13 +51,13 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p2$rand_adj_pval <- adj_pval[1:length(p2$simu_pval)]
-p3$rand_adj_pval <- adj_pval[(1*length(p2$simu_pval)+1): 2*length(p2$simu_pval)]
-p4$rand_adj_pval <- adj_pval[(2*length(p2$simu_pval)+1): 3*length(p2$simu_pval)]
+p2$rand_adj_pval <- adj_pval[1:1991]
+p3$rand_adj_pval <- adj_pval[1992: 3982]
+p4$rand_adj_pval <- adj_pval[3983: 5973]
 
-p6$rand_adj_pval <- adj_pval[(3*length(p2$simu_pval)+1): (3*length(p2$simu_pval) + length(p6$simu_pval))]
-p7$rand_adj_pval <- adj_pval[((3*length(p2$simu_pval) + 1*length(p6$simu_pval))+1): (3*length(p2$simu_pval) + 2*length(p6$simu_pval))]
-p8$rand_adj_pval <- adj_pval[((3*length(p2$simu_pval) + 2*length(p6$simu_pval))+1): (3*length(p2$simu_pval) + 3*length(p6$simu_pval))]
+p6$rand_adj_pval <- adj_pval[5974: 6760]
+p7$rand_adj_pval <- adj_pval[6761: 7547]
+p8$rand_adj_pval <- adj_pval[7548: 8334]
 
 
 write.table(p2,"/sc/arion/projects/Faroese/hilic/pfos/pfos_7/minerva_data_pfos_7_metabolites_14/pfos_7_met_14_beta_fisher_hilic.txt", row.names = FALSE)
