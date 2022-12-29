@@ -55,15 +55,15 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p1$rand_adj_pval <- adj_pval[1:length(p1$simu_pval)]
-p2$rand_adj_pval <- adj_pval[(1*length(p1$simu_pval)+1): 2*length(p1$simu_pval)]
-p3$rand_adj_pval <- adj_pval[(2*length(p1$simu_pval)+1): 3*length(p1$simu_pval)]
-p4$rand_adj_pval <- adj_pval[(3*length(p1$simu_pval)+1): 4*length(p1$simu_pval)]
+p1$rand_adj_pval <- adj_pval[1:1991]
+p2$rand_adj_pval <- adj_pval[1992: 3982]
+p3$rand_adj_pval <- adj_pval[3983: 5973]
+p4$rand_adj_pval <- adj_pval[5974: 7964]
 
-p5$rand_adj_pval <- adj_pval[(4*length(p1$simu_pval)+1): (4*length(p1$simu_pval) + length(p5$simu_pval))]
-p6$rand_adj_pval <- adj_pval[((4*length(p1$simu_pval) + 1*length(p5$simu_pval))+1): (4*length(p1$simu_pval) + 2*length(p5$simu_pval))]
-p7$rand_adj_pval <- adj_pval[((4*length(p1$simu_pval) + 2*length(p5$simu_pval))+1): (4*length(p1$simu_pval) + 3*length(p5$simu_pval))]
-p8$rand_adj_pval <- adj_pval[((4*length(p1$simu_pval) + 3*length(p5$simu_pval))+1): (4*length(p1$simu_pval) + 4*length(p5$simu_pval))]
+p5$rand_adj_pval <- adj_pval[7965: 8751]
+p6$rand_adj_pval <- adj_pval[8752: 9538]
+p7$rand_adj_pval <- adj_pval[9539: 10325]
+p8$rand_adj_pval <- adj_pval[10326: 11112]
 
 
 write.table(p1,"/sc/arion/projects/Faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_beta_fisher_hilic.txt", row.names = FALSE)
