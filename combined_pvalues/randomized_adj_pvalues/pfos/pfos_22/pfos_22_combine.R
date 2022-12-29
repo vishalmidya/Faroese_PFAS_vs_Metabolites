@@ -10,16 +10,16 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-d4 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/projects/Faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_hilic.txt")
 
-d8 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_c18.txt")
+d8 <- fread("/sc/arion/projects/Faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_c18.txt")
 
 test_stat_table <- as.data.frame(cbind(d4, d8))
 
 
-p4 <- fread("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt")
+p4 <- fread("/sc/arion/projects/Faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt")
 
-p8 <- fread("/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt")
+p8 <- fread("/sc/arion/projects/Faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt")
 
 fisher_p_val <- c(p4$simu_pval, p8$simu_pval)
 
@@ -34,7 +34,7 @@ min_p_nrep <- foreach(p = 1:dim(hyp_p_val)[1], .combine = 'c') %dopar% {
   min(hyp_p_val[p,], na.rm = T)
 }
 
-write.table(hyp_p_val,"/sc/arion/work/yaom03/new_faroese/combined_pvalues/randomized_adj_pvalues/pfos/pfos_22/pfos_22_hypothetical_pval.txt", row.names = FALSE)
+write.table(hyp_p_val,"/sc/arion/projects/Faroese/combined_pvalues/randomized_adj_pvalues/pfos/pfos_22/pfos_22_hypothetical_pval.txt", row.names = FALSE)
 
 # calculate the proportion of min_p_nrep that is sm/eq. p_value (for obs.)
 adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
@@ -46,9 +46,9 @@ p4$rand_adj_pval <- adj_pval[1:length(p4$simu_pval)]
 p8$rand_adj_pval <- adj_pval[(1*length(p4$simu_pval)+1): (1*length(p4$simu_pval) + length(p8$simu_pval))]
 
 
-write.table(p4,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(p4,"/sc/arion/projects/Faroese/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt", row.names = FALSE)
 
-write.table(p8,"/sc/arion/work/yaom03/new_faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt", row.names = FALSE)
+write.table(p8,"/sc/arion/projects/Faroese/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
