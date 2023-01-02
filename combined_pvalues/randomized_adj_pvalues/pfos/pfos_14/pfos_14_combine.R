@@ -47,11 +47,11 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p3$rand_adj_pval <- adj_pval[1:length(p3$simu_pval)]
-p4$rand_adj_pval <- adj_pval[(1*length(p3$simu_pval)+1): 2*length(p3$simu_pval)]
+p3$rand_adj_pval <- adj_pval[1:1991]
+p4$rand_adj_pval <- adj_pval[1992: 3982]
 
-p7$rand_adj_pval <- adj_pval[(2*length(p3$simu_pval)+1): (2*length(p3$simu_pval) + length(p7$simu_pval))]
-p8$rand_adj_pval <- adj_pval[((2*length(p3$simu_pval) + 1*length(p7$simu_pval))+1): (2*length(p3$simu_pval) + 2*length(p7$simu_pval))]
+p7$rand_adj_pval <- adj_pval[3983: 4769]
+p8$rand_adj_pval <- adj_pval[4770: 5556]
 
 
 write.table(p3,"/sc/arion/projects/Faroese/hilic/pfos/pfos_14/minerva_data_pfos_14_metabolites_22/pfos_14_met_22_beta_fisher_hilic.txt", row.names = FALSE)
