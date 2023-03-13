@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_hilic <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/data_hilic.csv", check.names = F)
-m.out1.pfos_0_age7.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/matched_data_pfos_at_0_met_at_7.csv")
+data_hilic <- read.csv("/sc/arion/projects/Faroese/hilic/data_hilic.csv", check.names = F)
+m.out1.pfos_0_age7.matched <- read.csv("/sc/arion/projects/Faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/matched_data_pfos_at_0_met_at_7.csv")
 
 data = m.out1.pfos_0_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfos0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
@@ -48,7 +48,7 @@ observed_test_stat <- unlist(oper[[1]])
 
 # Fisher p-value
 
-iterations = 50000
+iterations = 200000
 test_stat <- rep(NA_real_, iterations)
 
 set.seed(runif(1,0,1e4))
@@ -68,7 +68,7 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
-write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_hypothetical_test_stat_hilic.txt", row.names = FALSE)
+write.table(test_stat_table,"/sc/arion/projects/Faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_hypothetical_test_stat_hilic.txt", row.names = FALSE)
 
 
 p_values <- foreach(p = 1:dim(data.pfos_0.met_at_7)[1], .combine = 'c') %dopar% {
@@ -76,7 +76,7 @@ p_values <- foreach(p = 1:dim(data.pfos_0.met_at_7)[1], .combine = 'c') %dopar% 
 }
 data.pfos_0.met_at_7$simu_pval <- p_values
 
-write.table(data.pfos_0.met_at_7,"/sc/arion/work/yaom03/new_faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(data.pfos_0.met_at_7,"/sc/arion/projects/Faroese/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_beta_fisher_hilic.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)

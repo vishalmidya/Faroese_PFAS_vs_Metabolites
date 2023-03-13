@@ -10,7 +10,7 @@ library(carData)
 
 
 cores=detectCores()
-cl <- makeCluster(10) 
+cl <- makeCluster(12) 
 registerDoParallel(cl)
 
 start.time <- Sys.time()

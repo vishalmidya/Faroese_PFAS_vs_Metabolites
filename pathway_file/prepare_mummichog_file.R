@@ -8,10 +8,12 @@ library(dplyr)
 ## only keep four columns used in MetaboAnalyst
 format<- function(input_path, output_path) {
   input<- fread(input_path, header = TRUE)
+  
   output<- input %>%
     select(mz, time, beta, simu_pval) %>%
     dplyr::rename(m.z=mz, r.t=time, t.score=beta, p.value=simu_pval) %>%
     arrange(p.value)
+  
   write.table(output, output_path, row.names = FALSE)
   
 }
