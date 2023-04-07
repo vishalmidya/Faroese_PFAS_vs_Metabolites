@@ -59,6 +59,8 @@ library(data.table)
 library(ggrepel)
 library(mice)
 library(ggrepel)
+library(doParallel)
+library(patchwork)
 
 data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
 data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
@@ -304,8 +306,13 @@ for(i in 1:nrow(all_sig_hits)){
 ##### Figure
 
 all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_longitudinal_ryan_updated.csv")
+FI<- read.table("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/FI.txt", header = TRUE)
+all_sig_hits<- all_sig_hits %>% 
+               inner_join(FI, by=c("PFAS_age", "Age", "PFAS", "Met_id", "Mode"))
+# 
 all_sig_hits$Age <- as.factor(all_sig_hits$Age)
-all_sig_hits$Name[which(all_sig_hits$Name == "N-Acetylneuraminic acid/N-Acetyl-a-neuraminic acid")] <- "N-Acetylneuraminic acid/\nN-Acetyl-a-neuraminic acid"
+all_sig_hits$Name[which(all_sig_hits$Name == "N-Acetylneuraminic acid/N-Acetyl-a-neuraminic acid (1)")] <- "N-Acetylneuraminic acid/\nN-Acetyl-a-neuraminic acid (1)"
+all_sig_hits$Name[which(all_sig_hits$Name == "N-Acetylneuraminic acid/N-Acetyl-a-neuraminic acid (2)")] <- "N-Acetylneuraminic acid/\nN-Acetyl-a-neuraminic acid (2)"
 all_sig_hits$Name[which(all_sig_hits$Name == "Asymmetric dimethylarginine/Symmetric dimethylarginine (Dimethyl-Arginine)")] <- "Asymmetric dimethylarginine/\nSymmetric dimethylarginine\n(Dimethyl-Arginine)"
 all_sig_hits$Name[which(all_sig_hits$Name == "81114-Eicosatrienoic acid (linolenic acid) omega-6")] <- "81114-Eicosatrienoic acid\n(linolenic acid) omega-6"
 all_sig_hits$Name[which(all_sig_hits$Name == "Betaine/L-Valine/Vaporole/N-Methyl-a-aminoisobutyric acid/5-Aminopentanoic acid/Norvaline/Amyl Nitrite")] <- "Betaine/L-Valine/Vaporole/\nN-Methyl-a-aminoisobutyric acid/5-Aminopentanoic acid/\nNorvaline/Amyl Nitrite"
@@ -318,126 +325,179 @@ all_sig_hits$sig<-ifelse(all_sig_hits$rand_adj_pval<0.2, "*", NA)
 
 ## AGE 0
 vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 0,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode)) +# Show all points
-          geom_point(size = 2)   +  scale_shape_manual(values = c(15,17))
-        + scale_color_manual(drop = FALSE,
-                             values = c( "red",  "blue",  "green", 
-                                         "grey27",   "mediumpurple1"),
-                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))
-        + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
-          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
-               title = "Prenatal PFAS exposure and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 4, family = 'serif',
-                            fontface = 'italic',
-                            box.padding = unit(0.5, "lines"),
-                            max.iter = 2e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
-                            force = 2, force_pull = 2, show.legend = F)+
-          geom_text(aes(label = sig), nudge_y = 0.01, nudge_x=0.01))
+          geom_point(size = 1.5, position = position_dodge(width = 0.2)) +  
+          geom_errorbar(aes(ymin = lower_FI, ymax = higher_FI), width = 0.03,size=0.8,position = position_dodge(width = 0.2))+
+          scale_shape_manual(values = c(15,17))+ 
+          scale_color_manual(drop = FALSE,
+                             values = c( "red",  "blue",  "#1C8041", 
+                                         "grey27",   "#E55709"),
+                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))+
+          geom_hline(yintercept= 0, color = "black", size = 1, linetype="dashed") + 
+          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients w/ 95% Fiducial Interval", 
+               title = "Prenatal PFAS exposure") + 
+          theme_bw() +  
+          geom_text_repel(size = 6.5, 
+                           position = position_dodge(width = 0.2),
+                           family = 'serif',
+                           fontface = 'italic',
+                           hjust = 2.5,
+                           direction = "y",
+                           box.padding = unit(0.5, "lines"),
+                           max.iter = 2e4,
+                           max.overlaps = getOption("ggrepel.max.overlaps", default = 20),
+                           force = 2, force_pull = 2, show.legend = F) +
+          geom_text_repel(aes(label = sig),
+                          size = 4, 
+                          position = position_dodge(width = 0.2),
+                          hjust = -1,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          min.segment.length = 0.2,
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                          force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+
+vol <-  (vol + theme(plot.title=element_text(size=18,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=16,face="bold"),
+                     axis.text.x = element_text(size=16,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1))
+         + ylim(c(-1.1,0.8))
          + annotate("rect", xmin = c(0.75, 1.75, 2.75, 3.75), 
                     xmax = c(1.25, 2.25, 3.25, 4.25), 
-                    ymin = c(-1, -1, -1, -1), ymax =rep(1,4),
+                    ymin = rep(-1.1,4), ymax =rep(0.8,4),
                     alpha = 0.05)
-         + guides(color = guide_legend(override.aes = list(size = 4)),
-                  shape = guide_legend(override.aes = list(size = 4))))
+         + guides(color = "none",
+                  shape = "none"))
 vol_0 <- vol
 vol_0
 
 #################################################################################
 ## AGE 7
 
-vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 7,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode)) +# Show all points
-          geom_point(size = 2)   +  scale_shape_manual(values = c(15,17))
-        + scale_color_manual(drop = FALSE,
-                             values = c( "red",  "blue",  "green", 
-                                         "grey27",   "mediumpurple1"),
-                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))
-        + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
-          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
-               title = "PFAS exposure at age 7 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 4, family = 'serif',
-                            fontface = 'italic',
-                            box.padding = unit(0.5, "lines"),
-                            max.iter = 1e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
-                            force = 2, force_pull = 2, show.legend = F)+
-          geom_text(aes(label = sig), nudge_y = 0.01, nudge_x=0.01))
+vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 7,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode, alpha=Met_id)) +# Show all points
+          geom_point(size = 1.5, position = position_dodge(width = 0.2)) +  
+          geom_errorbar(aes(ymin = lower_FI, ymax = higher_FI), width = 0.03,size=0.8,position = position_dodge(width = 0.2))+
+          scale_alpha_manual(values = c(1,1,1))+
+          scale_shape_manual(values = c(15,17))+ 
+          scale_color_manual(drop = FALSE,
+                             values = c( "red",  "blue",  "#1C8041", 
+                                         "grey27",   "#E55709"),
+                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))+
+          geom_hline(yintercept= 0, color = "black", size = 1, linetype="dashed") + 
+          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients w/ 95% Fiducial Interval", 
+               title = "PFAS exposure at age 7") + 
+          theme_bw() +  
+          geom_text_repel(size = 6.5, 
+                           position = position_dodge(width = 0.2),
+                           family = 'serif',
+                           fontface = 'italic',
+                           hjust = 1.5,
+                           direction = "y",
+                           box.padding = unit(0.5, "lines"),
+                           max.iter = 2e4,
+                           max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                           force = 2, force_pull = 2, show.legend = F) +
+          geom_text_repel(aes(label = sig),
+                          size = 4, 
+                          position = position_dodge(width = 0.2),
+                          hjust = -1,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          min.segment.length = 0.2,
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                          force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+
+vol <-  (vol + theme(plot.title=element_text(size=18,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=16,face="bold"),
+                     axis.text.x = element_text(size=16,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1.3))
+         + ylim(c(-0.3,1.5))
          + annotate("rect", xmin = c(0.75, 1.75, 2.75), 
                     xmax = c(1.25, 2.25, 3.25), 
-                    ymin = c(-1, -1, -1), 
-                    ymax =rep(1.2,3),
+                    ymin = rep(-0.3,3), ymax =rep(1.5,3),
                     alpha = 0.05)
-         + guides(color = guide_legend(override.aes = list(size = 4)),
-                  shape = guide_legend(override.aes = list(size = 4))))
+         + guides(color = "none",
+                  shape = "none",
+                  alpha = "none"))
+
 vol_7 <- vol
 vol_7
-
 #################################################################################
 
 ## AGE 14
 
-vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 14,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode)) +# Show all points
-          geom_point(size = 2)   +  scale_shape_manual(values = c(15,17))
-        + scale_color_manual(drop = FALSE,
-                             values = c( "red",  "blue",  "green", 
-                                         "grey27",   "mediumpurple1"),
-                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))
-        + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
-          
-          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
-               title = "PFAS exposure at age 14 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 4, family = 'serif',
-                            fontface = 'italic',
-                            box.padding = unit(0.5, "lines"),
-                            max.iter = 2e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
-                            force = 2, force_pull = 2, show.legend = F)+
-          geom_text(aes(label = sig), nudge_y = 0.01, nudge_x=0.01))
+vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 14,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode, alpha=Met_id)) +# Show all points
+          geom_point(size = 1.5, position = position_dodge(width = 0.2)) +  
+          geom_errorbar(aes(ymin = lower_FI, ymax = higher_FI), width = 0.03,size=0.8,position = position_dodge(width = 0.2))+
+          scale_alpha_manual(values = rep(1,6))+
+          scale_shape_manual(values = c(15,17))+ 
+          scale_color_manual(drop = FALSE,
+                             values = c( "red",  "blue",  "#1C8041", 
+                                         "grey27",   "#E55709"),
+                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))+
+          geom_hline(yintercept= 0, color = "black", size = 1, linetype="dashed") + 
+          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients w/ 95% Fiducial Interval", 
+               title = "PFAS exposure at age 14") + 
+          theme_bw() +  
+          geom_text_repel(size =6.5, 
+                          position = position_dodge(width = 0.2),
+                          family = 'serif',
+                          fontface = 'italic',
+                          hjust = 2,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 10),
+                          force = 2, force_pull = 2, show.legend = F) +
+          geom_text_repel(aes(label = sig),
+                          size = 4, 
+                          position = position_dodge(width = 0.2),
+                          hjust = -1,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          min.segment.length = 0.2,
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                          force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+
+vol <-  (vol + theme(plot.title=element_text(size=18,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=16,face="bold"),
+                     axis.text.x = element_text(size=16,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1))
+         + ylim(c(-1.2,0.5))
          + annotate("rect", xmin = c(0.75, 1.75), 
                     xmax = c(1.25, 2.25), 
-                    ymin = c(-1, -1), 
-                    ymax =rep(1,2),
+                    ymin = rep(-1.2,2), ymax =rep(0.5,2),
                     alpha = 0.05)
          + guides(color = guide_legend(override.aes = list(size = 4)),
-                  shape = guide_legend(override.aes = list(size = 4))))
+                  shape = guide_legend(override.aes = list(size = 4)),
+                  alpha = "none"))
+
 vol_14 <- vol
 vol_14
 
@@ -445,58 +505,87 @@ vol_14
 
 ## AGE 22
 
-vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 22,], aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode)) +# Show all points
-          geom_point(size = 2)   +  scale_shape_manual(values = c(17))
-        + scale_color_manual(drop = FALSE,
-                             values = c( "red",  "blue",  "green", 
-                                         "grey27",   "mediumpurple1"),
-                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))
-        + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
-          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
-               title = "PFAS exposure at age 22 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 4, family = 'serif',
-                            fontface = 'italic',
-                            box.padding = unit(0.5, "lines"),
-                            max.iter = 2e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
-                            force = 2, force_pull = 2, show.legend = F)+
-          geom_text(aes(label = sig), nudge_y = 0.01, nudge_x=0.01))
+vol <- (ggplot((all_sig_hits[all_sig_hits$PFAS_age == 22,] %>% filter(Name!="Midazolam")), aes(x=Age, y=beta, color=PFAS, label=Name, shape = Mode, alpha=Met_id)) +# Show all points
+          geom_point(size = 1.5, position = position_dodge(width = 0.2)) +  
+          geom_errorbar(aes(ymin = lower_FI, ymax = higher_FI), width = 0.03,size=0.8,position = position_dodge(width = 0.2))+
+          scale_alpha_manual(values = rep(1,6))+
+          scale_shape_manual(values = c(15,17))+ 
+          scale_color_manual(drop = FALSE,
+                             values = c( "red",  "blue",  "#1C8041", 
+                                         "grey27",   "#E55709"),
+                             labels = c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))+
+          geom_hline(yintercept= 0, color = "black", size = 1, linetype="dashed") + 
+          labs(x = "Age at metabolomic assessment", y = "Beta Coefficients w/ 95% Fiducial Interval", 
+               title = "PFAS exposure at age 22") + 
+          theme_bw() +  
+          geom_text_repel(size = 6.5, 
+                          position = position_dodge(width = 0.2),
+                          family = 'serif',
+                          fontface = 'italic',
+                          hjust = 1.2,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                          force = 2, force_pull = 2, show.legend = F) +
+          geom_text_repel(aes(label = sig),
+                          size = 4, 
+                          position = position_dodge(width = 0.2),
+                          hjust = -1,
+                          direction = "y",
+                          box.padding = unit(0.5, "lines"),
+                          min.segment.length = 0.2,
+                          max.iter = 2e4,
+                          max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                          force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+
+vol <-  (vol + theme(plot.title=element_text(size=18,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=16,face="bold"),
+                     axis.text.x = element_text(size=16,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1))
+         + ylim(c(-0.25,0.25))
          + annotate("rect", xmin = c(0.75), 
                     xmax = c(1.25), 
-                    ymin = c(-1), 
-                    ymax =rep(1,1),
+                    ymin = rep(-0.25,1), ymax =rep(0.25,1),
                     alpha = 0.05)
-         + guides(color = guide_legend(override.aes = list(size = 4)),
-                  shape = guide_legend(override.aes = list(size = 4))))
+         + guides(color = "none",
+                  shape = "none",
+                  alpha = "none"))
+
 vol_22 <- vol
 vol_22
-
 
 
 # write.csv(df, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/New_faroese/sig_metabolites.csv", row.names = F )
 
 
 jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/all_modes_all_metabolites_longitudinal.jpeg",
-     units="in", width=15, height=20, res=600)
+     units="in", width=24, height=28, res=600)
 
+layout<- c(
+  area(t=1, l=1, b = 1, r = 5),
+  area(t=2, l=2, b = 2, r = 5),
+  area(t=3, l=3, b = 3, r = 5),
+  area(t=4, l=4, b = 4, r = 5)
+)
 
-plot<- ggpubr::ggarrange(vol_0, vol_7, vol_14, vol_22, nrow = 4, ncol = 1, common.legend = T, 
-                  legend = "bottom")
-annotate_figure(plot, top = text_grob("Prospective associations between individual PFAS exposure and metabolic alterations throughout life-course", 
-                                      color = "black", face = "bold", size = 18))
+plot1<- vol_0 + vol_7 + vol_14 + vol_22 + 
+         plot_layout(design=layout,
+                     guides='collect',
+                      )+
+         plot_annotation(title="Prospective associations between individual PFAS exposure and metabolic alterations throughout life-course",
+                         theme = list(plot.title=element_text(size=20,face="bold"))) &
+  theme(legend.position='bottom')
+
+plot1
 
 
 dev.off()
