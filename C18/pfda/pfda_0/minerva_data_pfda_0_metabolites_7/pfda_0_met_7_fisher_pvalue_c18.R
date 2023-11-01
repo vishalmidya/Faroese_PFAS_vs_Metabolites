@@ -15,7 +15,7 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_c18 <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/data_c18.csv", check.names = F)
+data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
 m.out1.pfda_0_age7.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/pfda/pfda_0/minerva_data_pfda_0_metabolites_7/matched_data_pfda_at_0_met_at_7.csv")
 
 data = m.out1.pfda_0_age7.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfda0', 'sex',
