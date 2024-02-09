@@ -303,8 +303,7 @@ dim(data_c18)
 
 write.csv(data_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", row.names = F)
 
-###################################################################################################################
-
+################################################################################################################
 data_met_clinical_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
 
 # transpose met data
@@ -409,6 +408,8 @@ merged_met_clinical_c18$cbreastfed_tot <- ifelse(merged_met_clinical_c18$breastf
 merged_met_clinical_c18$cmatfishpreg <- as.numeric(ifelse(merged_met_clinical_c18$matfishpreg_cat2 >= 0.5, "1","0"))
 
 
+merged_met_clinical_c18$age7 <- merged_met_clinical_c18$age_7
+merged_met_clinical_c18$age14 <- merged_met_clinical_c18$age_14
 
 dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 7,(colnames(merged_met_clinical_c18) %in% Met_name)])
 dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 14,(colnames(merged_met_clinical_c18) %in% Met_name)])

@@ -412,6 +412,9 @@ merged_met_clinical_hilic$cbreastfed_tot <- ifelse(merged_met_clinical_hilic$bre
 merged_met_clinical_hilic$cmatfishpreg <- as.numeric(ifelse(merged_met_clinical_hilic$matfishpreg_cat2 >= 0.5, "1","0"))
 
 
+merged_met_clinical_hilic$age7 <- merged_met_clinical_hilic$age_7
+merged_met_clinical_hilic$age14 <- merged_met_clinical_hilic$age_14
+
 
 dim(merged_met_clinical_hilic[merged_met_clinical_hilic$Year == 7,(colnames(merged_met_clinical_hilic) %in% Met_name)])
 dim(merged_met_clinical_hilic[merged_met_clinical_hilic$Year == 14,(colnames(merged_met_clinical_hilic) %in% Met_name)])
