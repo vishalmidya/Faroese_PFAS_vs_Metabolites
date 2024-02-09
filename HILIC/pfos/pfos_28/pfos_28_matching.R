@@ -8,7 +8,7 @@ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
 merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
 
-m.out1.pfos28_age28 <- matchit(cpfos28 ~  sex + mage + cmatfishpreg  + cparity + age28, 
+m.out1.pfos28_age28 <- matchit(cpfos28 ~ sex + mage + cmatfishpreg  + cparity + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.1)
 

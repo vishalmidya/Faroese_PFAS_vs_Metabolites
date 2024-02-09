@@ -2,7 +2,8 @@
 
 library(optmatch)
 library(MatchIt)
-
+library(cobalt)
+library(tidyverse)
 # sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7
 
 merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
