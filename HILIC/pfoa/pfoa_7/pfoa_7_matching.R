@@ -56,19 +56,19 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfoa7_age7.matched <- match.data(m.out1.pfoa7_age7)
-write.csv(m.out1.pfoa7_age7.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolite_7/matched_data_pfoa_at_7_met_at_7.csv",
+write.csv(m.out1.pfoa7_age7.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_7/matched_data_pfoa_at_7_met_at_7.csv",
           row.names = F)
 
 m.out1.pfoa7_age14.matched <- match.data(m.out1.pfoa7_age14)
-write.csv(m.out1.pfoa7_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolite_14/matched_data_pfoa_at_7_met_at_14.csv",
+write.csv(m.out1.pfoa7_age14.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_14/matched_data_pfoa_at_7_met_at_14.csv",
           row.names = F)
 
 m.out1.pfoa7_age22.matched <- match.data(m.out1.pfoa7_age22)
-write.csv(m.out1.pfoa7_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolite_22/matched_data_pfoa_at_7_met_at_22.csv",
+write.csv(m.out1.pfoa7_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_22/matched_data_pfoa_at_7_met_at_22.csv",
           row.names = F)
 
 m.out1.pfoa7_age28.matched <- match.data(m.out1.pfoa7_age28)
-write.csv(m.out1.pfoa7_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolite_28/matched_data_pfoa_at_7_met_at_28.csv",
+write.csv(m.out1.pfoa7_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_28/matched_data_pfoa_at_7_met_at_28.csv",
           row.names = F)
 
 

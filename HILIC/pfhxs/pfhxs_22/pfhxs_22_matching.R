@@ -34,11 +34,11 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfhxs22_age22.matched <- match.data(m.out1.pfhxs22_age22)
-write.csv(m.out1.pfhxs22_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_22/minerva_data_pfhxs_22_metabolite_22/matched_data_pfhxs_at_22_met_at_22.csv",
+write.csv(m.out1.pfhxs22_age22.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_22/minerva_data_pfhxs_22_metabolites_22/matched_data_pfhxs_at_22_met_at_22.csv",
           row.names = F)
 
 m.out1.pfhxs22_age28.matched <- match.data(m.out1.pfhxs22_age28)
-write.csv(m.out1.pfhxs22_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_22/minerva_data_pfhxs_22_metabolite_28/matched_data_pfhxs_at_22_met_at_28.csv",
+write.csv(m.out1.pfhxs22_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfhxs/pfhxs_22/minerva_data_pfhxs_22_metabolites_28/matched_data_pfhxs_at_22_met_at_28.csv",
           row.names = F)
 
 

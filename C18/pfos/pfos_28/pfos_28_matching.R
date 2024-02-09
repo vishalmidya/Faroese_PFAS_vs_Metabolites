@@ -24,7 +24,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 ## export matched data
 m.out1.pfos28_age28.matched <- match.data(m.out1.pfos28_age28)
-write.csv(m.out1.pfos28_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfos/pfos_28/minerva_data_pfos_28_metabolite_28/matched_data_pfos_at_28_met_at_28.csv",
+write.csv(m.out1.pfos28_age28.matched, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/pfos/pfos_28/minerva_data_pfos_28_metabolites_28/matched_data_pfos_at_28_met_at_28.csv",
           row.names = F)
 
 
