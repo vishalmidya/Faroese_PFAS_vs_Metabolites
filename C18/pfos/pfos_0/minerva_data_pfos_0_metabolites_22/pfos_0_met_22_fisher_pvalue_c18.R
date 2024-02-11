@@ -48,7 +48,7 @@ observed_test_stat <- unlist(oper[[1]])
 
 # Fisher p-value
 
-iterations = 200000
+iterations = 50000
 test_stat <- rep(NA_real_, iterations)
 
 set.seed(runif(1,0,1e4))
