@@ -15,13 +15,13 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_c18 <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/data_c18.csv", check.names = F)
-m.out1.pfhxs_14_age28.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/matched_data_pfhxs_at_14_met_at_28.csv")
+data_c18 <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/data_c18.csv", check.names = F)
+m.out1.pfhxs_14_age28.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/matched_data_pfhxs_at_14_met_at_28.csv")
 
 data = m.out1.pfhxs_14_age28.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfhxs14', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age28' )]
 
-data.pfhxs_14.met_at_28 <- cbind(data_c18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
+data.pfhxs_14.met_at_28 <- cbind(data_c18[,c("mz","time","Met_id")])
 data.pfhxs_14.met_at_28$beta <- rep(NA_real_, nrow(data.pfhxs_14.met_at_28))
 data.pfhxs_14.met_at_28$model_pval <- rep(NA_real_, nrow(data.pfhxs_14.met_at_28))
 data.pfhxs_14.met_at_28$simu_pval <- rep(NA_real_, nrow(data.pfhxs_14.met_at_28))
@@ -68,7 +68,7 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
-write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/pfhxs_14_met_28_hypothetical_test_stat_c18.txt", row.names = FALSE)
+write.table(test_stat_table,"/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/pfhxs_14_met_28_hypothetical_test_stat_c18.txt", row.names = FALSE)
 
 
 p_values <- foreach(p = 1:dim(data.pfhxs_14.met_at_28)[1], .combine = 'c') %dopar% {
@@ -76,7 +76,7 @@ p_values <- foreach(p = 1:dim(data.pfhxs_14.met_at_28)[1], .combine = 'c') %dopa
 }
 data.pfhxs_14.met_at_28$simu_pval <- p_values
 
-write.table(data.pfhxs_14.met_at_28,"/sc/arion/work/yaom03/new_faroese/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/pfhxs_14_met_28_beta_fisher_c18.txt", row.names = FALSE)
+write.table(data.pfhxs_14.met_at_28,"/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_14/minerva_data_pfhxs_14_metabolites_28/pfhxs_14_met_28_beta_fisher_c18.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)

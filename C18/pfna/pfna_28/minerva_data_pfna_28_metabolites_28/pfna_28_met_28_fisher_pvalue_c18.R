@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_c18 <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/data_c18.csv", check.names = F)
-m.out1.pfna_28_age28.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/matched_data_pfna_at_28_met_at_28.csv")
+data_c18 <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/data_c18.csv", check.names = F)
+m.out1.pfna_28_age28.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/matched_data_pfna_at_28_met_at_28.csv")
 
 data = m.out1.pfna_28_age28.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfna28', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age28' )]
@@ -68,7 +68,7 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
-write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/pfna_28_met_28_hypothetical_test_stat_c18.txt", row.names = FALSE)
+write.table(test_stat_table,"/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/pfna_28_met_28_hypothetical_test_stat_c18.txt", row.names = FALSE)
 
 
 p_values <- foreach(p = 1:dim(data.pfna_28.met_at_28)[1], .combine = 'c') %dopar% {
@@ -76,7 +76,7 @@ p_values <- foreach(p = 1:dim(data.pfna_28.met_at_28)[1], .combine = 'c') %dopar
 }
 data.pfna_28.met_at_28$simu_pval <- p_values
 
-write.table(data.pfna_28.met_at_28,"/sc/arion/work/yaom03/new_faroese/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/pfna_28_met_28_beta_fisher_c18.txt", row.names = FALSE)
+write.table(data.pfna_28.met_at_28,"/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_28/minerva_data_pfna_28_metabolites_28/pfna_28_met_28_beta_fisher_c18.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
