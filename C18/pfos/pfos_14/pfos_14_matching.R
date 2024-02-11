@@ -13,9 +13,9 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 14
-m.out1.pfos14_age14 <- matchit(cpfos14 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg + age14,
+m.out1.pfos14_age14 <- matchit(cpfos14 ~ sex + mbmi  + cmatfishpreg  + cparity,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.1)
+                              distance = "glm", caliper = 0.9)
 
 summary(m.out1.pfos14_age14)
 f <- love.plot(m.out1.pfos14_age14)
@@ -23,9 +23,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfos14_age22 <- matchit(cpfos14 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg + age22, 
+m.out1.pfos14_age22 <- matchit(cpfos14 ~ sex + mage  + smokepreg_2 + cmatfishpreg  + cparity, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.5)
+                              distance = "glm", caliper = 0.05)
 
 summary(m.out1.pfos14_age22)
 f <- love.plot(m.out1.pfos14_age22)
@@ -33,7 +33,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfos14_age28 <- matchit(cpfos14 ~  sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
+m.out1.pfos14_age28 <- matchit(cpfos14 ~  sex + mage  + smokepreg_2 + cmatfishpreg  + cparity  + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.1)
 

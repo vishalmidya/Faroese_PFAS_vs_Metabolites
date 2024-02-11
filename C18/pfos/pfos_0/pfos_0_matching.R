@@ -13,7 +13,7 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 7
-m.out1.pfos0_age7 <- matchit(cpfos0 ~  sex + mage  + cmatfishpreg  + cparity + age7, 
+m.out1.pfos0_age7 <- matchit(cpfos0 ~  mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
                              distance = "glm", caliper = 0.5)
 
@@ -25,9 +25,9 @@ f + labs(x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , lin
 
 
 #---------------------------  at age 14
-m.out1.pfos0_age14 <- matchit(cpfos0 ~    mage  + smokepreg_2 + cmatfishpreg  + cparity + age14,
+m.out1.pfos0_age14 <- matchit(cpfos0 ~  sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.1)
+                              distance = "glm", caliper = 0.2)
 
 summary(m.out1.pfos0_age14)
 f <- love.plot(m.out1.pfos0_age14)
@@ -35,7 +35,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfos0_age22 <- matchit(cpfos0 ~  sex + mage + mbmi   + cparity , 
+m.out1.pfos0_age22 <- matchit(cpfos0 ~  sex + mbmi  + smokepreg_2  + cparity + age22, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.5)
 
@@ -45,7 +45,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfos0_age28 <- matchit(cpfos0 ~ mage + mbmi  + smokepreg_2 + cmatfishpreg + age28, 
+m.out1.pfos0_age28 <- matchit(cpfos0 ~ sex  + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.1)
 
