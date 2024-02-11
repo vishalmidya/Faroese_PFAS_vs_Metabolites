@@ -14,9 +14,9 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 7
-m.out1.pfda7_age7 <- matchit(cpfda7 ~   sex + mage + mbmi + cmatfishpreg  + age7, 
+m.out1.pfda7_age7 <- matchit(cpfda7 ~   sex + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
-                             distance = "glm", caliper = 0.2)
+                             distance = "glm", caliper = 0.5)
 
 summary(m.out1.pfda7_age7)
 f <- love.plot(m.out1.pfda7_age7)
@@ -25,9 +25,9 @@ f + labs(x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , lin
 
 
 #---------------------------  at age 14
-m.out1.pfda7_age14 <- matchit(cpfda7 ~  mage + mbmi + cmatfishpreg  + cparity + age14,
+m.out1.pfda7_age14 <- matchit(cpfda7 ~  sex  + mbmi  + smokepreg_2 + cmatfishpreg  + cparity,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.2)
+                              distance = "glm", caliper = 0.5)
 
 summary(m.out1.pfda7_age14)
 f <- love.plot(m.out1.pfda7_age14)
@@ -35,9 +35,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfda7_age22 <- matchit(cpfda7 ~   sex + mage + mbmi  + smokepreg_2  + cparity + age22, 
+m.out1.pfda7_age22 <- matchit(cpfda7 ~   sex + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.25)
+                              distance = "glm", caliper = 0.5)
 
 summary(m.out1.pfda7_age22)
 f <- love.plot(m.out1.pfda7_age22)
@@ -45,9 +45,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfda7_age28 <- matchit(cpfda7 ~ sex + mbmi + cmatfishpreg  + cparity+ age28, 
+m.out1.pfda7_age28 <- matchit(cpfda7 ~ sex + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.4)
+                              distance = "glm", caliper = 0.8)
 
 summary(m.out1.pfda7_age28)
 f <- love.plot(m.out1.pfda7_age28)
