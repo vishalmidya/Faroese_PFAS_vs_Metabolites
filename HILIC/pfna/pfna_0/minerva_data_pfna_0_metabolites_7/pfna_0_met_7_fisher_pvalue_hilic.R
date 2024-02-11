@@ -21,7 +21,7 @@ m.out1.pfna_0_age7.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/hili
 data = m.out1.pfna_0_age7.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfna0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
 
-data.pfna_0.met_at_7 <- cbind(data_hilic[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
+data.pfna_0.met_at_7 <- cbind(data_hilic[,c("mz","time","Met_id")])
 data.pfna_0.met_at_7$beta <- rep(NA_real_, nrow(data.pfna_0.met_at_7))
 data.pfna_0.met_at_7$model_pval <- rep(NA_real_, nrow(data.pfna_0.met_at_7))
 data.pfna_0.met_at_7$simu_pval <- rep(NA_real_, nrow(data.pfna_0.met_at_7))
