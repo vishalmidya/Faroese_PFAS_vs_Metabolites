@@ -14,16 +14,16 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 22
-m.out1.pfoa22_age22 <- matchit(cpfoa22 ~ sex + mage  + cmatfishpreg  + cparity + age22, 
+m.out1.pfoa22_age22 <- matchit(cpfoa22 ~ sex  + smokepreg_2 + cmatfishpreg  + cparity  + age22, 
                                data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
-                               distance = "glm", caliper = 0.5)
+                               distance = "glm", caliper = 0.05)
 
 summary(m.out1.pfoa22_age22)
 f <- love.plot(m.out1.pfoa22_age22)
 f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , linetype="dotted",  color = "black", size=1.5) + geom_vline(xintercept  = -0.1 , linetype="dotted", color = "black", size=1.5)
 
 #---------------------------  at age 28
-m.out1.pfoa22_age28 <- matchit(cpfoa22 ~ sex + mage + mbmi + cmatfishpreg + age28, 
+m.out1.pfoa22_age28 <- matchit(cpfoa22 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                                data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                                distance = "glm", caliper = 0.5)
 

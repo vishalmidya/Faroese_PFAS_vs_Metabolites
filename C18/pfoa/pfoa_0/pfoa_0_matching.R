@@ -14,7 +14,7 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 7
-m.out1.pfoa0_age7 <- matchit(cpfoa0 ~   sex + mage  + smokepreg_2 + cmatfishpreg  + age7, 
+m.out1.pfoa0_age7 <- matchit(cpfoa0 ~   sex  + smokepreg_2 + cmatfishpreg  + cparity   + age7, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
                              distance = "glm", caliper = 0.4)
 
@@ -25,9 +25,9 @@ f + labs(x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , lin
 
 
 #---------------------------  at age 14
-m.out1.pfoa0_age14 <- matchit(cpfoa0 ~   sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14,
+m.out1.pfoa0_age14 <- matchit(cpfoa0 ~   sex + mage  + smokepreg_2  + cparity  + age14,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.5)
+                              distance = "glm", caliper = 0.1)
 
 summary(m.out1.pfoa0_age14)
 f <- love.plot(m.out1.pfoa0_age14)
@@ -35,7 +35,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfoa0_age22 <- matchit(cpfoa0 ~   sex + mage  + cparity + age22, 
+m.out1.pfoa0_age22 <- matchit(cpfoa0 ~   sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity  + age22, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.05)
 
@@ -45,9 +45,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfoa0_age28 <- matchit(cpfoa0 ~ mage + mbmi  + smokepreg_2  + cparity + age28, 
+m.out1.pfoa0_age28 <- matchit(cpfoa0 ~ sex  + smokepreg_2 + cmatfishpreg  + cparity  + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.4)
+                              distance = "glm", caliper = 0.05)
 
 summary(m.out1.pfoa0_age28)
 f <- love.plot(m.out1.pfoa0_age28)
