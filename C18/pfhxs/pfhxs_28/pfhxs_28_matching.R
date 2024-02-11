@@ -14,9 +14,9 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 28
-m.out1.pfhxs28_age28 <- matchit(cpfhxs28 ~ sex + mage   + smokepreg_2   + cparity + age28, 
+m.out1.pfhxs28_age28 <- matchit(cpfhxs28 ~ sex + cmatfishpreg  + cparity  + age28, 
                                data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
-                               distance = "glm", caliper = 0.1)
+                               distance = "glm", caliper = 0.5)
 
 summary(m.out1.pfhxs28_age28)
 f <- love.plot(m.out1.pfhxs28_age28)
