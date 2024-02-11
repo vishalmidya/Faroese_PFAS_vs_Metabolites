@@ -21,7 +21,7 @@ m.out1.pfda_22_age22.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c1
 data = m.out1.pfda_22_age22.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfda22', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age22' )]
 
-data.pfda_22.met_at_22 <- cbind(data_c18[,c("mz","time","KEGG","Annotation.confidence.score","chem_name","Met_id")])
+data.pfda_22.met_at_22 <- cbind(data_c18[,c("mz","time","Met_id")])
 data.pfda_22.met_at_22$beta <- rep(NA_real_, nrow(data.pfda_22.met_at_22))
 data.pfda_22.met_at_22$model_pval <- rep(NA_real_, nrow(data.pfda_22.met_at_22))
 data.pfda_22.met_at_22$simu_pval <- rep(NA_real_, nrow(data.pfda_22.met_at_22))
