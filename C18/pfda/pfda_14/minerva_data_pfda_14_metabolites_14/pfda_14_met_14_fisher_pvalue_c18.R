@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_c18 <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/data_c18.csv", check.names = F)
-m.out1.pfda_14_age14.matched <- read.csv("/sc/arion/work/yaom03/new_faroese/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/matched_data_pfda_at_14_met_at_14.csv")
+data_c18 <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/data_c18.csv", check.names = F)
+m.out1.pfda_14_age14.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/matched_data_pfda_at_14_met_at_14.csv")
 
 data = m.out1.pfda_14_age14.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfda14', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age14' )]
@@ -68,7 +68,7 @@ test_stat_table <- data.table::transpose(test_stat)
 colnames(test_stat_table) <- rownames(test_stat)
 rownames(test_stat_table) <- colnames(test_stat)
 
-write.table(test_stat_table,"/sc/arion/work/yaom03/new_faroese/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/pfda_14_met_14_hypothetical_test_stat_c18.txt", row.names = FALSE)
+write.table(test_stat_table,"/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/pfda_14_met_14_hypothetical_test_stat_c18.txt", row.names = FALSE)
 
 
 p_values <- foreach(p = 1:dim(data.pfda_14.met_at_14)[1], .combine = 'c') %dopar% {
@@ -76,7 +76,7 @@ p_values <- foreach(p = 1:dim(data.pfda_14.met_at_14)[1], .combine = 'c') %dopar
 }
 data.pfda_14.met_at_14$simu_pval <- p_values
 
-write.table(data.pfda_14.met_at_14,"/sc/arion/work/yaom03/new_faroese/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/pfda_14_met_14_beta_fisher_c18.txt", row.names = FALSE)
+write.table(data.pfda_14.met_at_14,"/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_14/pfda_14_met_14_beta_fisher_c18.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
