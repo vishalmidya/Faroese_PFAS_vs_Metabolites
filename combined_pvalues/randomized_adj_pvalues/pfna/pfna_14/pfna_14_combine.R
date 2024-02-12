@@ -10,20 +10,20 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-d3 <- fread("/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_hypothetical_test_stat_hilic.txt")
-d4 <- fread("/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_hypothetical_test_stat_hilic.txt")
+d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_hypothetical_test_stat_hilic.txt")
 
-d7 <- fread("/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_hypothetical_test_stat_c18.txt")
-d8 <- fread("/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_hypothetical_test_stat_c18.txt")
+d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_hypothetical_test_stat_c18.txt")
+d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_hypothetical_test_stat_c18.txt")
 
 test_stat_table <- as.data.frame(cbind(d3,d4, d7,d8))
 
 
-p3 <- fread("/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_hilic.txt")
-p4 <- fread("/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_hilic.txt")
+p3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_hilic.txt")
+p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_hilic.txt")
 
-p7 <- fread("/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_c18.txt")
-p8 <- fread("/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_c18.txt")
+p7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_c18.txt")
+p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_c18.txt")
 
 fisher_p_val <- c(p3$simu_pval,p4$simu_pval,
                   
@@ -40,7 +40,7 @@ min_p_nrep <- foreach(p = 1:dim(hyp_p_val)[1], .combine = 'c') %dopar% {
   min(hyp_p_val[p,], na.rm = T)
 }
 
-write.table(hyp_p_val,"/sc/arion/projects/Faroese/combined_pvalues/randomized_adj_pvalues/pfna/pfna_14/pfna_14_hypothetical_pval.txt", row.names = FALSE)
+write.table(hyp_p_val,"/sc/arion/projects/Faroese/pfas_met/combined_pvalues/randomized_adj_pvalues/pfna/pfna_14/pfna_14_hypothetical_pval.txt", row.names = FALSE)
 
 
 # calculate the proportion of min_p_nrep that is sm/eq. p_value (for obs.)
@@ -55,11 +55,11 @@ p7$rand_adj_pval <- adj_pval[3983: 4769]
 p8$rand_adj_pval <- adj_pval[4770: 5556]
 
 
-write.table(p3,"/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_hilic.txt", row.names = FALSE)
-write.table(p4,"/sc/arion/projects/Faroese/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(p3,"/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_hilic.txt", row.names = FALSE)
+write.table(p4,"/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_hilic.txt", row.names = FALSE)
 
-write.table(p7,"/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_c18.txt", row.names = FALSE)
-write.table(p8,"/sc/arion/projects/Faroese/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_c18.txt", row.names = FALSE)
+write.table(p7,"/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_22/pfna_14_met_22_beta_fisher_c18.txt", row.names = FALSE)
+write.table(p8,"/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_14/minerva_data_pfna_14_metabolites_28/pfna_14_met_28_beta_fisher_c18.txt", row.names = FALSE)
 
 end.time <- Sys.time()
 (time.taken <- end.time - start.time)
