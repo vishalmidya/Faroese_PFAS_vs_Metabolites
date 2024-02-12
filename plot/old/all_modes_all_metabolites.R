@@ -56,6 +56,7 @@ library(BWQS)
 library(qwraps2)
 library(MatchIt)
 library(data.table)
+library(DescTools)
 library(mice)
 library(ggrepel)
 
@@ -188,18 +189,18 @@ table(pfas_met_tab$Age)
 pfas22 <- pfas_met_tab
 
 all_sig_hits <- rbind(pfas0,pfas7,pfas14,pfas22)
-all_sig_hits <- all_sig_hits[,c("mz","time","beta","KEGG","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval")]
+all_sig_hits <- all_sig_hits[,c("mz","time","beta","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval")]
 
 
 ##################################################################################################################################################################
 # Annotations
 
-conf_met <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/confirmed_metabolites.csv",fileEncoding = "Latin1")
+conf_met <- read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/confirmed_metabolites.csv")
 conf_met_HILIC <- conf_met[conf_met$Method.RT == "HILIC+",]
 conf_met_C18 <- conf_met[conf_met$Method.RT == "C18-",]
 
-stage4_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/Stage4.csv")
-stage4_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/Stage4.csv")
+stage4_hilic <- read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/HILIC/Stage4.csv")
+stage4_c18 <- read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/C18/Stage4.csv")
 
 all_sig_hits$chemical_ID <- rep(NA_character_, dim(all_sig_hits)[1])
 all_sig_hits$Annotation.confidence.score <- rep(NA_character_, dim(all_sig_hits)[1])
@@ -266,7 +267,7 @@ for(i in 1:nrow(all_sig_hits)){
 }
 
 
-write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites.csv", row.names = F )
+# write.csv(all_sig_hits, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/sig_metabolites.csv", row.names = F )
 
 
 #################################################################################
@@ -284,7 +285,7 @@ write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New
 
 ##### Figure
 
-all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_ryan_updated.csv")
+all_sig_hits <- read.csv("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/sig_metabolites_ryan_updated.csv")
 all_sig_hits$Age <- as.factor(all_sig_hits$Age)
 all_sig_hits$Name[4] <- "N-Acetylneuraminic acid/\nN-Acetyl-a-neuraminic acid"
 all_sig_hits$Name[5] <- "N-Acetylneuraminic acid/\nN-Acetyl-a-neuraminic acid"
@@ -445,10 +446,10 @@ vol_22
 
 
 
-# write.csv(df, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites.csv", row.names = F )
+# write.csv(df, "C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/sig_metabolites.csv", row.names = F )
 
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/all_modes_all_metabolites.jpeg",
+jpeg("C:/Users/midyav01/OneDrive - The Mount Sinai Hospital/MSSM Projects/METABOLOMICS/New_faroese/all_modes_all_metabolites.jpeg",
      units="in", width=17, height=12, res=600)
 
 
