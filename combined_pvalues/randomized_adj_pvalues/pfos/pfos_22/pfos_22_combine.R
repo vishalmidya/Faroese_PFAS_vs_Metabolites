@@ -20,16 +20,16 @@ c18_metid<- keep_metabolites_c18$Met_id
 hilic_resultsid<- gsub("Met", "result.", keep_metabolites_hilic$Met_id)
 c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
 
-d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
 
-d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_c18.txt")
+d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
 
 test_stat_table <- as.data.frame(cbind(d4, d8))
 
 
-p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt")
+p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
 
-p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt")
+p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_c18.txt") %>% filter(Met_id %in% c18_metid)
 
 fisher_p_val <- c(p4$simu_pval, p8$simu_pval)
 
@@ -50,9 +50,16 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p4$rand_adj_pval <- adj_pval[1:1107]
 
-p8$rand_adj_pval <- adj_pval[1108: 1759]
+#!!!!!!!!!!!!!!!!!!!!!!!
+p4$rand_adj_pval <- adj_pval[1:nrow(p1)]
+
+p8$rand_adj_pval <- adj_pval[(nrow(p1)+1):(nrow(p1)+nrow(p5))]
+
+# fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
+p4$fdr<- p.adjust(p4$simu_pval, "fdr")
+
+p8$fdr<- p.adjust(p8$simu_pval, "fdr")
 
 
 write.table(p4,"/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_22/minerva_data_pfos_22_metabolites_28/pfos_22_met_28_beta_fisher_hilic.txt", row.names = FALSE)
