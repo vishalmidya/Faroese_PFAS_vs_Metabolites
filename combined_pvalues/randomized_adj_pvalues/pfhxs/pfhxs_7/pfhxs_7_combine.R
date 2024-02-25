@@ -62,13 +62,24 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p2$rand_adj_pval <- adj_pval[1:1107]
-p3$rand_adj_pval <- adj_pval[1108: 2214]
-p4$rand_adj_pval <- adj_pval[2215: 3321]
+#!!!!!!!!!!!!!!!!!!!!!!!
+p2$rand_adj_pval <- adj_pval[1:nrow(p1)]
+p3$rand_adj_pval <- adj_pval[(nrow(p1)+1):(nrow(p1)*2)]
+p4$rand_adj_pval <- adj_pval[(nrow(p1)*2+1):(nrow(p1)*3)]
 
-p6$rand_adj_pval <- adj_pval[3322: 3973]
-p7$rand_adj_pval <- adj_pval[3974: 4625]
-p8$rand_adj_pval <- adj_pval[4626: 5277]
+p6$rand_adj_pval <- adj_pval[(nrow(p1)*3+1):(nrow(p1)*3+nrow(p5))]
+p7$rand_adj_pval <- adj_pval[(nrow(p1)*3+nrow(p5)+1):(nrow(p1)*3+nrow(p5)*2)]
+p8$rand_adj_pval <- adj_pval[(nrow(p1)*3+nrow(p5)*2+1):(nrow(p1)*3+nrow(p5)*3)]
+
+# fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
+p2$fdr<- p.adjust(p2$simu_pval, "fdr")
+p3$fdr<- p.adjust(p3$simu_pval, "fdr")
+p4$fdr<- p.adjust(p4$simu_pval, "fdr")
+
+p6$fdr<- p.adjust(p6$simu_pval, "fdr")
+p7$fdr<- p.adjust(p7$simu_pval, "fdr")
+p8$fdr<- p.adjust(p8$simu_pval, "fdr")
+
 
 
 write.table(p2,"/sc/arion/projects/Faroese/pfas_met/hilic/pfhxs/pfhxs_7/minerva_data_pfhxs_7_metabolites_14/pfhxs_7_met_14_beta_fisher_hilic.txt", row.names = FALSE)
