@@ -32,9 +32,9 @@ d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_7/minerva_data_pf
 test_stat_table <- as.data.frame(cbind(d2,d3,d4, d6,d7,d8))
 
 
-p2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_14/pfoa_7_met_14_beta_fisher_hilic.txt")
-p3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_22/pfoa_7_met_22_beta_fisher_hilic.txt")
-p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_28/pfoa_7_met_28_beta_fisher_hilic.txt")
+p2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_14/pfoa_7_met_14_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
+p3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_22/pfoa_7_met_22_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
+p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_28/pfoa_7_met_28_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
 
 p6 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_14/pfoa_7_met_14_beta_fisher_c18.txt")
 p7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_22/pfoa_7_met_22_beta_fisher_c18.txt")

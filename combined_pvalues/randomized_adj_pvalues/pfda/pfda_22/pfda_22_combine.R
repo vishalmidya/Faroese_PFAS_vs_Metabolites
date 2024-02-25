@@ -28,7 +28,7 @@ d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_22/minerva_data_p
 test_stat_table <- as.data.frame(cbind(d4, d8))
 
 
-p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_22/minerva_data_pfda_22_metabolites_28/pfda_22_met_28_beta_fisher_hilic.txt")
+p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_22/minerva_data_pfda_22_metabolites_28/pfda_22_met_28_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
 
 p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_22/minerva_data_pfda_22_metabolites_28/pfda_22_met_28_beta_fisher_c18.txt")
 
