@@ -80,15 +80,16 @@ p8$rand_adj_pval <- adj_pval[(nrow(p1)*4+nrow(p5)*3+1):(nrow(p1)*4+nrow(p5)*4)]
 
 
 # fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
-p1$fdr<- p.adjust(p1$simu_pval, "fdr")
-p2$fdr<- p.adjust(p2$simu_pval, "fdr")
-p3$fdr<- p.adjust(p3$simu_pval, "fdr")
-p4$fdr<- p.adjust(p4$simu_pval, "fdr")
+p1$fdr <- p.adjust(fisher_p_val, "fdr")[1:nrow(p1)]
+p2$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)+1):(nrow(p1)*2)]
+p3$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*2+1):(nrow(p1)*3)]
+p4$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*3+1):(nrow(p1)*4)]
 
-p5$fdr<- p.adjust(p5$simu_pval, "fdr")
-p6$fdr<- p.adjust(p6$simu_pval, "fdr")
-p7$fdr<- p.adjust(p7$simu_pval, "fdr")
-p8$fdr<- p.adjust(p8$simu_pval, "fdr")
+
+p5$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+1):(nrow(p1)*4+nrow(p5))]
+p6$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)+1):(nrow(p1)*4+nrow(p5)*2)]
+p7$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)*2+1):(nrow(p1)*4+nrow(p5)*3)]
+p8$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)*3+1):(nrow(p1)*4+nrow(p5)*4)]
 
 
 

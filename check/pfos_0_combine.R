@@ -67,22 +67,13 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p1$rand_adj_pval <- adj_pval[1:1107]
-p2$rand_adj_pval <- adj_pval[1108: 2214]
-p3$rand_adj_pval <- adj_pval[2215: 3321]
-p4$rand_adj_pval <- adj_pval[3322: 4428]
-
-p5$rand_adj_pval <- adj_pval[4429: 5080]
-p6$rand_adj_pval <- adj_pval[5081: 5732]
-p7$rand_adj_pval <- adj_pval[5733: 6384]
-p8$rand_adj_pval <- adj_pval[6385: 7036]
 
 
 # fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
-p1$fdr<- p.adjust(fisher_p_val, "fdr")[1:nrow(p1)]
-p2$fdr<- p.adjust(fisher_p_val, "fdr")[(nrow(p1)+1):2*nrow(p1)]
-p3$fdr<- p.adjust(fisher_p_val, "fdr")[(2*nrow(p1)+1):3*nrow(p1)]
-p4$fdr<- p.adjust(fisher_p_val, "fdr")[(3*nrow(p1)+1):4*nrow(p1)]
+p1$fdr <- p.adjust(fisher_p_val, "fdr")[1:nrow(p1)]
+p2$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)+1):(nrow(p1)*2)]
+p3$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*2+1):(nrow(p1)*3)]
+p4$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*3+1):(nrow(p1)*4)]
 
 
 p5$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+1):(nrow(p1)*4+nrow(p5))]
