@@ -2,7 +2,7 @@ library(foreach)
 library(doParallel)
 library(car)
 library(MASS)
-library(ggplot2)
+library(tidyverse)
 library(data.table)
 
 keep_metabolites_hilic<- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/keep_metabolites_hilic.csv", check.names = F)
@@ -76,6 +76,19 @@ p5$rand_adj_pval <- adj_pval[4429: 5080]
 p6$rand_adj_pval <- adj_pval[5081: 5732]
 p7$rand_adj_pval <- adj_pval[5733: 6384]
 p8$rand_adj_pval <- adj_pval[6385: 7036]
+
+
+# fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
+p1$fdr<- p.adjust(fisher_p_val, "fdr")[1:nrow(p1)]
+p2$fdr<- p.adjust(fisher_p_val, "fdr")[(nrow(p1)+1):2*nrow(p1)]
+p3$fdr<- p.adjust(fisher_p_val, "fdr")[(2*nrow(p1)+1):3*nrow(p1)]
+p4$fdr<- p.adjust(fisher_p_val, "fdr")[(3*nrow(p1)+1):4*nrow(p1)]
+
+
+p5$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+1):(nrow(p1)*4+nrow(p5))]
+p6$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)+1):(nrow(p1)*4+nrow(p5)*2)]
+p7$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)*2+1):(nrow(p1)*4+nrow(p5)*3)]
+p8$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p1)*4+nrow(p5)*3+1):(nrow(p1)*4+nrow(p5)*4)]
 
 
 write.table(p1,"/sc/arion/projects/Faroese/pfas_met/hilic/pfos/pfos_0/minerva_data_pfos_0_metabolites_7/pfos_0_met_7_beta_fisher_fdr_hilic.txt", row.names = FALSE)
