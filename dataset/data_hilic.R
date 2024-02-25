@@ -88,7 +88,7 @@ for(i in 1:length(d1$id)){
 
 dt <- d[which(d$id %in% d1$id),]
 
-# Select the PFAS exposure columns and covariates
+# dplyr::select the PFAS exposure columns and covariates
 
 d <- dt[,c("id",'pfos_0', 'pfos_7', 'pfos_14', 'pfos_22', 'pfos_28', 'pfoa_0', 'pfoa_7', 'pfoa_14', 'pfoa_22', 'pfoa_28', 
            'pfhxs_0', 'pfhxs_7', 'pfhxs_14', 'pfhxs_22', 'pfhxs_28',  'pfna_0', 'pfna_7', 'pfna_14', 'pfna_22', 'pfna_28', 
@@ -187,19 +187,19 @@ length(valid_colnames)/4      # 309  - year_id
 conf_met_org <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/confirmed_metabolites.csv", fileEncoding = "Latin1")
 conf_met_add <- read_excel("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/confirmed_metabolites_added.xlsx")
 
-conf_met_add<- conf_met_add %>% 
+conf_met_add<- conf_met_add %>%
                mutate(Method.RT = case_when(Method == "HILIC/ESI+" ~ "HILIC+",
                                             Method %in% c("C18/ESI-", "C18/ES-") ~ "C18-",
                                             .default = NA))
 conf_met_org<- conf_met_org %>%  
-               select(Metabolite, m.z..adduct., time, Method.RT)
+               dplyr::select(Metabolite, m.z..adduct., time, Method.RT)
 names(conf_met_org)[3]<- "Time"
 
 
-##### clean additional metabolites: remove unknown method
-conf_met_add<- conf_met_add %>%  
-  filter(Method.RT %in% c("HILIC+", "C18-")) %>% 
-  select(Metabolite, `m/z (Adduct)`, `RT (sec)`, Method.RT)
+#### clean additional metabolites: remove unknown method
+conf_met_add<- conf_met_add %>%
+  filter(Method.RT %in% c("HILIC+", "C18-")) %>%
+  dplyr::select(Metabolite, `m/z (Adduct)`, `RT (sec)`, Method.RT)
 
 names(conf_met_add)[2]<- "m.z..adduct."
 names(conf_met_add)[3]<- "Time"
@@ -232,7 +232,7 @@ dim(conf_met)
 ##### clean metabolites: restrict to HILIC+
 conf_met<- conf_met %>% 
            filter(Method.RT == "HILIC+") %>% 
-           select(Metabolite, mz_ratio, time, Method.RT)
+           dplyr::select(Metabolite, mz_ratio, time, Method.RT)
 
 dim(conf_met)
 
@@ -289,21 +289,82 @@ length(unique(median_sum_feature_hilic$Metabolite))
 
 
 length(median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite) == FALSE, ]$Metabolite)
-# 1107
+# 1107 
 
 
-# median_sum_feature_hilic %>% select(mz, time, Metabolite)
+# median_sum_feature_hilic %>% dplyr::select(mz, time, Metabolite)
 
 
 
-# export data
+# remove metabolites unable to annotate
 data_hilic <- median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite) == FALSE,c(valid_colnames,"mz","time","seq")]
-data_hilic$Met_id <- paste0("Met",seq(1:nrow(data_hilic)))
-dim(data_hilic) 
-# [1] 1107 1240
 
+data_hilic$Met_id <- paste0("Met",seq(1:nrow(data_hilic)))
+
+# restrict to only original confirmed metabolites and annotate with closest confirmed metabolite!!!!!!!!!!!!!!!!!!!!!
+conf_met_org$mz_ratio <- rep(NA_real_, nrow(conf_met_org))
+conf_met_org$adduct <- rep(NA_character_, nrow(conf_met_org))
+
+for(i in 1:nrow(conf_met_org)){
+  conf_met_org$mz_ratio[i] = as.numeric(strsplit(conf_met_org$m.z..adduct.[i]," ")[[1]][1])
+  x <- strsplit(strsplit(conf_met_org$m.z..adduct.[i]," ")[[1]][2],"")[[1]]
+  conf_met_org$adduct[i] <- as.character(knitr::combine_words(x[x!= "(" & x!= ")"], and = "", sep = ""))
+}
+
+for(i in 1:nrow(conf_met_org)){
+  conf_met_org$time[i] = as.numeric(strsplit(conf_met_org$Time[i],",")[[1]][1])
+}
+
+dim(conf_met_org)
+
+conf_met_org<- conf_met_org %>% 
+  filter(is.na(time)==FALSE & is.na(mz_ratio)==FALSE)
+
+dim(conf_met_org)
+
+
+conf_met<- conf_met_org %>% 
+  filter(Method.RT == "HILIC+") %>% 
+  dplyr::select(Metabolite, mz_ratio, time, Method.RT)
+
+dim(conf_met)
+# 314   4
+
+
+
+data_hilic$Metabolite <- rep(NA_character_, nrow(data_hilic))
+for(i in 1:nrow(data_hilic)){
+
+  rrt <- conf_met$Metabolite[which(abs(data_hilic$mz[i] - conf_met$mz) < 3)]  ###### criteria
+  a <- unique(rrt[!is.na(rrt)]) 
+  b <- unique(conf_met$Metabolite[conf_met$Metabolite %in% a][abs(data_hilic$time[i] - conf_met$time[conf_met$Metabolite %in% a]) < 5])
+  c <- conf_met$Metabolite[conf_met$Metabolite %in% b][which.min(abs(data_hilic$time[i] - conf_met$time[conf_met$Metabolite %in% b]) + abs(data_hilic$mz[i] - conf_met$mz[conf_met$Metabolite %in% b]))]
+
+  if(length(c)!= 0){
+
+    dft <- conf_met[conf_met$Metabolite %in% c,c("Metabolite")]
+    data_hilic$Metabolite[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
+
+  }
+}
+
+
+
+length(data_hilic[is.na(data_hilic$Metabolite) == FALSE, ]$Metabolite)
+# 719
+
+# remove metabolites unable to annotate
+data_hilic <- data_hilic[is.na(data_hilic$Metabolite) == FALSE,]
+
+dim(data_hilic) 
+# [1] 719 1241
+
+# data_hilic %>% dplyr::select(mz, time, Metabolite,Met_id)
+
+keep_metabolites_hilic = data.frame(Met_id = data_hilic$Met_id)
 
 write.csv(data_hilic, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", row.names = F)
+write.csv(keep_metabolites_hilic, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/keep_metabolites_hilic.csv", row.names = F)
 
 
 ###################################################################################################################
@@ -318,7 +379,7 @@ Met_name<- data_met_clinical_hilic$Met_id
 colnames(t_data_met_clinical_hilic) <- Met_name
 t_data_met_clinical_hilic$id_Year <- colnames(data_met_clinical_hilic)
 dim(t_data_met_clinical_hilic)
-# [1] 1240 1108
+# [1] 1240  720
 
 
 t_data_met_clinical_hilic$id <- rep(NA_character_,nrow(t_data_met_clinical_hilic))
@@ -334,7 +395,7 @@ for(i in 1:nrow(t_data_met_clinical_hilic)){
 merged_met_clinical_hilic <- merge(d_long,t_data_met_clinical_hilic, by = c("id","Year"))
 merged_met_clinical_hilic$id <- as.character(merged_met_clinical_hilic$id)
 dim(merged_met_clinical_hilic)
-# [1] 1236 1140
+# [1] 1236  752
 
 # check available sample size at different timepoints
 nrow(merged_met_clinical_hilic %>% filter(Year == "7"))
@@ -345,7 +406,7 @@ nrow(merged_met_clinical_hilic %>% filter(Year == "28")) #493
 ## Subset for only 125 ids
 merged_met_clinical_hilic <- merged_met_clinical_hilic[which(merged_met_clinical_hilic$id %in% as.vector(t_data_met_clinical_hilic[t_data_met_clinical_hilic$Year == "7","id"])),]
 dim(merged_met_clinical_hilic)
-# [1] 500 1140
+# [1] 500 752
 
 
 
@@ -423,4 +484,17 @@ dim(merged_met_clinical_hilic[merged_met_clinical_hilic$Year == 28,(colnames(mer
 #[1]  125 1107
 
 write.csv(merged_met_clinical_hilic, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", row.names = F)
+
+
+
+
+
+
+
+
+
+
+
+
+
 

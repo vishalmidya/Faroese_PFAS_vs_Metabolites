@@ -65,53 +65,15 @@ library(patchwork)
 data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
 data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
 
-#### Combined plot
-
-###### AGE 0
-
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_0_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_0_metabolites_all_HILIC.txt", header = T)
-pfas_met_tab_0 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
-pfas_met_tab_0$PFAS_age <- rep("0", nrow(pfas_met_tab_0))
-
-###### AGE 7
-
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_7_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_7_metabolites_all_HILIC.txt", header = T)
-pfas_met_tab_7 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
-pfas_met_tab_7$PFAS_age <- rep("7", nrow(pfas_met_tab_7))
-
-###### AGE 14
-
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_14_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_14_metabolites_all_HILIC.txt", header = T)
-pfas_met_tab_14 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
-pfas_met_tab_14$PFAS_age <- rep("14", nrow(pfas_met_tab_14))
-
-
-###### AGE 22
-
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_22_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_22_metabolites_all_HILIC.txt", header = T)
-pfas_met_tab_22 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
-pfas_met_tab_22$PFAS_age <- rep("22", nrow(pfas_met_tab_22))
-
-pfas_met_tab_all <- rbind(pfas_met_tab_0,pfas_met_tab_7,pfas_met_tab_14,pfas_met_tab_22)
-
-for(i in 1:nrow(pfas_met_tab_all)){
-  if(pfas_met_tab_all$PFAS[i] == "pfoa"){pfas_met_tab_all$PFAS[i] = "PFOA"}
-  else if(pfas_met_tab_all$PFAS[i] == "pfos"){pfas_met_tab_all$PFAS[i] = "PFOS"}
-  else if(pfas_met_tab_all$PFAS[i] == "pfna"){pfas_met_tab_all$PFAS[i] = "PFNA"}
-  else if(pfas_met_tab_all$PFAS[i] == "pfda"){pfas_met_tab_all$PFAS[i] = "PFDA"}
-  else if(pfas_met_tab_all$PFAS[i] == "pfhxs"){pfas_met_tab_all$PFAS[i] = "PFHxS"}
-}
-
+pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_closest.csv")
 ##################################################################################################################################################################
 
 ## AGE 0
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met87" & pfas_met_tab_all$PFAS == "PFNA") & pfas_met_tab_all$Mode == "C18"| 
-                                    (pfas_met_tab_all$Met_id == "Met1269" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met253" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "C18"),]
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met867" & pfas_met_tab_all$PFAS == "PFOA") & pfas_met_tab_all$Mode == "HILIC"| 
+                                    (pfas_met_tab_all$Met_id == "Met258" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
+                                    (pfas_met_tab_all$Met_id == "Met300" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode == "C18")| 
+                                    (pfas_met_tab_all$Met_id == "Met314" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode == "C18")| 
+                                    (pfas_met_tab_all$Met_id == "Met580" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "C18"),]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "0", ]
 
 dim(pfas_met_tab)
@@ -119,8 +81,6 @@ pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("7","14","22","28"))
 
 table(pfas_met_tab$Age)
 
-pfas_met_tab$Metabolite <- rep(NA_character_,nrow(pfas_met_tab))
-for(i in 1:nrow(pfas_met_tab)) pfas_met_tab$Metabolite[i] <- strsplit(pfas_met_tab$chem_name,";")[[i]][1]
 
 pfas_met_tab_7 <- pfas_met_tab[pfas_met_tab$Age == "7",]
 pfas_met_tab_14 <- pfas_met_tab[pfas_met_tab$Age == "14",]

@@ -142,7 +142,7 @@ mapping_c18 <- read.delim("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/N
 median_sum_feature_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/MetabComBat_c18neg_merged_mediansummarized_featuretable_final.csv")
 
 median_sum_feature_c18 <- median_sum_feature_c18 %>% 
-  select(-ends_with("_A"), -ends_with("_B"))
+  dplyr::select(-ends_with("_A"), -ends_with("_B"))
 
 # Extract File name ID_YEAR
 
@@ -181,22 +181,23 @@ length(valid_colnames)/4      # 309  - year_id
 
 ### a). import confirmed metabolites, with additional metabolites
 
+
 conf_met_org <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/confirmed_metabolites.csv", fileEncoding = "Latin1")
 conf_met_add <- read_excel("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/confirmed_metabolites_added.xlsx")
 
-conf_met_add<- conf_met_add %>% 
+conf_met_add<- conf_met_add %>%
   mutate(Method.RT = case_when(Method == "HILIC/ESI+" ~ "HILIC+",
                                Method %in% c("C18/ESI-", "C18/ES-") ~ "C18-",
                                .default = NA))
 conf_met_org<- conf_met_org %>%  
-  select(Metabolite, m.z..adduct., time, Method.RT)
+  dplyr::select(Metabolite, m.z..adduct., time, Method.RT)
 names(conf_met_org)[3]<- "Time"
 
 
-##### clean additional metabolites: remove unknown method
-conf_met_add<- conf_met_add %>%  
-  filter(Method.RT %in% c("HILIC+", "C18-")) %>% 
-  select(Metabolite, `m/z (Adduct)`, `RT (sec)`, Method.RT)
+#### clean additional metabolites: remove unknown method
+conf_met_add<- conf_met_add %>%
+  filter(Method.RT %in% c("HILIC+", "C18-")) %>%
+  dplyr::select(Metabolite, `m/z (Adduct)`, `RT (sec)`, Method.RT)
 
 names(conf_met_add)[2]<- "m.z..adduct."
 names(conf_met_add)[3]<- "Time"
@@ -226,14 +227,14 @@ conf_met<- conf_met %>%
 
 dim(conf_met)
 
-##### clean metabolites: restrict to c18-
+##### clean metabolites: restrict to c18+
 conf_met<- conf_met %>% 
   filter(Method.RT == "C18-") %>% 
-  select(Metabolite, mz_ratio, time, Method.RT)
+  dplyr::select(Metabolite, mz_ratio, time, Method.RT)
 
 dim(conf_met)
 
-# [1] 363   4
+# [1] 754   4
 
 
 ## 2. median file
@@ -245,7 +246,7 @@ median_sum_feature_c18$zero_per<- median_sum_feature_c18$zero/length(valid_colna
 
 median_sum_feature_c18<- median_sum_feature_c18[median_sum_feature_c18$zero_per<25,]
 dim(median_sum_feature_c18)
-#3816
+#5067
 
 ##### for each metabolite, CV% > 30%
 median_sum_feature_c18<- median_sum_feature_c18 %>% 
@@ -256,8 +257,7 @@ median_sum_feature_c18<- median_sum_feature_c18 %>%
     cv = 100*(sd/mean))
 median_sum_feature_c18<- median_sum_feature_c18[median_sum_feature_c18$cv>30,]
 dim(median_sum_feature_c18)
-#3224
-
+#[1] 3224 1243
 
 
 
@@ -287,21 +287,84 @@ length(unique(median_sum_feature_c18$Metabolite))
 
 
 length(median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite) == FALSE, ]$Metabolite)
-# 652
+# 652 
 
 
-# View(median_sum_feature_c18 %>% select(mz, time, Metabolite))
+# median_sum_feature_c18 %>% dplyr::select(mz, time, Metabolite)
 
 
 
-# export data
+# remove metabolites unable to annotate
 data_c18 <- median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite) == FALSE,c(valid_colnames,"mz","time","seq")]
-data_c18$Met_id <- paste0("Met",seq(1:nrow(data_c18)))
-dim(data_c18) 
-# [1] 652 1239
 
+
+data_c18$Met_id <- paste0("Met",seq(1:nrow(data_c18)))
+
+
+# restrict to only original confirmed metabolites and annotate with closest confirmed metabolite!!!!!!!!!!!!!!!!!!!!!
+conf_met_org$mz_ratio <- rep(NA_real_, nrow(conf_met_org))
+conf_met_org$adduct <- rep(NA_character_, nrow(conf_met_org))
+
+for(i in 1:nrow(conf_met_org)){
+  conf_met_org$mz_ratio[i] = as.numeric(strsplit(conf_met_org$m.z..adduct.[i]," ")[[1]][1])
+  x <- strsplit(strsplit(conf_met_org$m.z..adduct.[i]," ")[[1]][2],"")[[1]]
+  conf_met_org$adduct[i] <- as.character(knitr::combine_words(x[x!= "(" & x!= ")"], and = "", sep = ""))
+}
+
+for(i in 1:nrow(conf_met_org)){
+  conf_met_org$time[i] = as.numeric(strsplit(conf_met_org$Time[i],",")[[1]][1])
+}
+
+dim(conf_met_org)
+
+conf_met_org<- conf_met_org %>% 
+  filter(is.na(time)==FALSE & is.na(mz_ratio)==FALSE)
+
+dim(conf_met_org)
+
+
+conf_met<- conf_met_org %>% 
+  filter(Method.RT == "C18-") %>% 
+  dplyr::select(Metabolite, mz_ratio, time, Method.RT)
+
+dim(conf_met)
+# 156    4
+
+
+
+data_c18$Metabolite <- rep(NA_character_, nrow(data_c18))
+for(i in 1:nrow(data_c18)){
+  
+  rrt <- conf_met$Metabolite[which(abs(data_c18$mz[i] - conf_met$mz) < 3)]  ###### criteria
+  a <- unique(rrt[!is.na(rrt)]) 
+  b <- unique(conf_met$Metabolite[conf_met$Metabolite %in% a][abs(data_c18$time[i] - conf_met$time[conf_met$Metabolite %in% a]) < 5])
+  c <- conf_met$Metabolite[conf_met$Metabolite %in% b][which.min(abs(data_c18$time[i] - conf_met$time[conf_met$Metabolite %in% b]) + abs(data_c18$mz[i] - conf_met$mz[conf_met$Metabolite %in% b]))]
+  
+  if(length(c)!= 0){
+    
+    dft <- conf_met[conf_met$Metabolite %in% c,c("Metabolite")]
+    data_c18$Metabolite[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
+    
+  }
+}
+
+
+
+length(data_c18[is.na(data_c18$Metabolite) == FALSE, ]$Metabolite)
+# 326
+
+# remove metabolites unable to annotate
+data_c18 <- data_c18[is.na(data_c18$Metabolite) == FALSE,]
+
+dim(data_c18) 
+# [1] 326 1240
+
+# data_c18 %>% dplyr::select(mz, time, Metabolite,Met_id)
+
+keep_metabolites_c18 = data.frame(Met_id = data_c18$Met_id)
 
 write.csv(data_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", row.names = F)
+write.csv(keep_metabolites_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/keep_metabolites_c18.csv", row.names = F)
 
 ################################################################################################################
 data_met_clinical_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
@@ -314,7 +377,7 @@ Met_name<- data_met_clinical_c18$Met_id
 colnames(t_data_met_clinical_c18) <- Met_name
 t_data_met_clinical_c18$id_Year <- colnames(data_met_clinical_c18)
 dim(t_data_met_clinical_c18)
-# [1] 1239  653
+# [1] 1240  327
 
 
 t_data_met_clinical_c18$id <- rep(NA_character_,nrow(t_data_met_clinical_c18))
@@ -330,7 +393,7 @@ for(i in 1:nrow(t_data_met_clinical_c18)){
 merged_met_clinical_c18 <- merge(d_long,t_data_met_clinical_c18, by = c("id","Year"))
 merged_met_clinical_c18$id <- as.character(merged_met_clinical_c18$id)
 dim(merged_met_clinical_c18)
-# [1] 1235  685
+# [1] 1235  359
 
 # check available sample size at different timepoints
 nrow(merged_met_clinical_c18 %>% filter(Year == "7"))
@@ -341,7 +404,7 @@ nrow(merged_met_clinical_c18 %>% filter(Year == "28")) #493
 ## Subset for only 125 ids
 merged_met_clinical_c18 <- merged_met_clinical_c18[which(merged_met_clinical_c18$id %in% as.vector(t_data_met_clinical_c18[t_data_met_clinical_c18$Year == "7","id"])),]
 dim(merged_met_clinical_c18)
-# [1] 500 685
+# [1] 500 359
 
 
 
@@ -415,7 +478,7 @@ dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 7,(colnames(merged_m
 dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 14,(colnames(merged_met_clinical_c18) %in% Met_name)])
 dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 22,(colnames(merged_met_clinical_c18) %in% Met_name)])
 dim(merged_met_clinical_c18[merged_met_clinical_c18$Year == 28,(colnames(merged_met_clinical_c18) %in% Met_name)])
-#[1]  125 652
+#[1]  125 326
 
 write.csv(merged_met_clinical_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/merged_omics_c18.csv", row.names = F)
 
