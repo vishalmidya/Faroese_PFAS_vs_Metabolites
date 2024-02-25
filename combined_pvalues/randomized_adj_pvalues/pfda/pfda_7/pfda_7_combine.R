@@ -64,22 +64,24 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
 
 
 #!!!!!!!!!!!!!!!!!!!!!!!
-p2$rand_adj_pval <- adj_pval[1:nrow(p1)]
-p3$rand_adj_pval <- adj_pval[(nrow(p1)+1):(nrow(p1)*2)]
-p4$rand_adj_pval <- adj_pval[(nrow(p1)*2+1):(nrow(p1)*3)]
+p2$rand_adj_pval <- adj_pval[1:nrow(p2)]
+p3$rand_adj_pval <- adj_pval[(nrow(p2)+1):(nrow(p2)*2)]
+p4$rand_adj_pval <- adj_pval[(nrow(p2)*2+1):(nrow(p2)*3)]
 
-p6$rand_adj_pval <- adj_pval[(nrow(p1)*3+1):(nrow(p1)*3+nrow(p5))]
-p7$rand_adj_pval <- adj_pval[(nrow(p1)*3+nrow(p5)+1):(nrow(p1)*3+nrow(p5)*2)]
-p8$rand_adj_pval <- adj_pval[(nrow(p1)*3+nrow(p5)*2+1):(nrow(p1)*3+nrow(p5)*3)]
+
+p6$rand_adj_pval <- adj_pval[(nrow(p2)*3+1):(nrow(p2)*3+nrow(p6))]
+p7$rand_adj_pval <- adj_pval[(nrow(p2)*3+nrow(p6)+1):(nrow(p2)*3+nrow(p6)*2)]
+p8$rand_adj_pval <- adj_pval[(nrow(p2)*3+nrow(p6)*2+1):(nrow(p2)*3+nrow(p6)*3)]
 
 # fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
-p2$fdr<- p.adjust(p2$simu_pval, "fdr")
-p3$fdr<- p.adjust(p3$simu_pval, "fdr")
-p4$fdr<- p.adjust(p4$simu_pval, "fdr")
+p2$fdr <- p.adjust(fisher_p_val, "fdr")[1:nrow(p2)]
+p3$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p2)+1):(nrow(p2)*2)]
+p4$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p2)*2+1):(nrow(p2)*3)]
 
-p6$fdr<- p.adjust(p6$simu_pval, "fdr")
-p7$fdr<- p.adjust(p7$simu_pval, "fdr")
-p8$fdr<- p.adjust(p8$simu_pval, "fdr")
+
+p6$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p2)*3+1):(nrow(p2)*3+nrow(p6))]
+p7$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p2)*3+nrow(p6)+1):(nrow(p2)*3+nrow(p6)*2)]
+p8$fdr <- p.adjust(fisher_p_val, "fdr")[(nrow(p2)*3+nrow(p6)*2+1):(nrow(p2)*3+nrow(p6)*3)]
 
 
 
