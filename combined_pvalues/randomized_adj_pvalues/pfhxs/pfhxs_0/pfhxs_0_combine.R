@@ -2,7 +2,7 @@ library(foreach)
 library(doParallel)
 library(car)
 library(MASS)
-library(ggplot2)
+library(tidyverse)
 library(data.table)
 
 cl <- makeCluster(15) 
