@@ -24,8 +24,8 @@ c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
 d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_22/pfoa_14_met_22_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
 d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_28/pfoa_14_met_28_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
 
-d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_22/pfoa_14_met_22_hypothetical_test_stat_c18.txt")
-d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_28/pfoa_14_met_28_hypothetical_test_stat_c18.txt")
+d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_22/pfoa_14_met_22_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
+d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_28/pfoa_14_met_28_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
 
 test_stat_table <- as.data.frame(cbind(d3,d4, d7,d8))
 

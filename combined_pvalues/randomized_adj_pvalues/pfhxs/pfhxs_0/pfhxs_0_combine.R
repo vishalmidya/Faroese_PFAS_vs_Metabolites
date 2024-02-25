@@ -25,10 +25,10 @@ d2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfhxs/pfhxs_0/minerva_dat
 d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_22/pfhxs_0_met_22_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
 d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_28/pfhxs_0_met_28_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
 
-d5 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_7/pfhxs_0_met_7_hypothetical_test_stat_c18.txt")
-d6 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_14/pfhxs_0_met_14_hypothetical_test_stat_c18.txt")
-d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_22/pfhxs_0_met_22_hypothetical_test_stat_c18.txt")
-d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_28/pfhxs_0_met_28_hypothetical_test_stat_c18.txt")
+d5 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_7/pfhxs_0_met_7_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
+d6 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_14/pfhxs_0_met_14_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
+d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_22/pfhxs_0_met_22_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
+d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfhxs/pfhxs_0/minerva_data_pfhxs_0_metabolites_28/pfhxs_0_met_28_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
 
 test_stat_table <- as.data.frame(cbind(d1,d2,d3,d4,d5,d6,d7,d8))
 
