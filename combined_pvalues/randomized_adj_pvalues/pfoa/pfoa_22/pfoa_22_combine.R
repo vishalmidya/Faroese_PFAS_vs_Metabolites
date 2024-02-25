@@ -51,9 +51,16 @@ adj_pval <- foreach(i = 1:length(fisher_p_val), .combine = 'c') %dopar% {
   mean(min_p_nrep <= fisher_p_val[i])
 }
 
-p4$rand_adj_pval <- adj_pval[1:1107]
 
-p8$rand_adj_pval <- adj_pval[1108: 1759]
+#!!!!!!!!!!!!!!!!!!!!!!!
+p4$rand_adj_pval <- adj_pval[1:nrow(p1)]
+
+p8$rand_adj_pval <- adj_pval[(nrow(p1)+1):(nrow(p1)+nrow(p5))]
+
+# fdr !!!!!!!!!!!!!!!!!!!!!!!!!!!
+p4$fdr<- p.adjust(p4$simu_pval, "fdr")
+
+p8$fdr<- p.adjust(p8$simu_pval, "fdr")
 
 
 write.table(p4,"/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_22/minerva_data_pfoa_22_metabolites_28/pfoa_22_met_28_beta_fisher_hilic.txt", row.names = FALSE)
