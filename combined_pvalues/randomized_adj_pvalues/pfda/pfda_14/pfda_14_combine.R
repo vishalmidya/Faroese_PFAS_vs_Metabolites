@@ -33,8 +33,8 @@ test_stat_table <- as.data.frame(cbind(d3,d4, d7,d8))
 p3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_14/minerva_data_pfda_14_metabolites_22/pfda_14_met_22_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
 p4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_14/minerva_data_pfda_14_metabolites_28/pfda_14_met_28_beta_fisher_hilic.txt")%>% filter(Met_id %in% hilic_metid)
 
-p7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_22/pfda_14_met_22_beta_fisher_c18.txt")
-p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_28/pfda_14_met_28_beta_fisher_c18.txt")
+p7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_22/pfda_14_met_22_beta_fisher_c18.txt") %>% filter(Met_id %in% c18_metid)
+p8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_14/minerva_data_pfda_14_metabolites_28/pfda_14_met_28_beta_fisher_c18.txt") %>% filter(Met_id %in% c18_metid)
 
 fisher_p_val <- c(p3$simu_pval,p4$simu_pval,
                   
