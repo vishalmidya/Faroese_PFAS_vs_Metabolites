@@ -10,6 +10,17 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
+
+#!!!!!!!!!!!!!
+keep_metabolites_hilic<- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/keep_metabolites_hilic.csv", check.names = F)
+keep_metabolites_c18<- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/keep_metabolites_c18.csv", check.names = F)
+
+hilic_metid<- keep_metabolites_hilic$Met_id
+c18_metid<- keep_metabolites_c18$Met_id
+
+hilic_resultsid<- gsub("Met", "result.", keep_metabolites_hilic$Met_id)
+c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
+
 d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_22/pfoa_14_met_22_hypothetical_test_stat_hilic.txt")
 d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_14/minerva_data_pfoa_14_metabolites_28/pfoa_14_met_28_hypothetical_test_stat_hilic.txt")
 
