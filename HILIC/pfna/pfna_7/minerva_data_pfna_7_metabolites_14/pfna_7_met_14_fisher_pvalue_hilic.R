@@ -20,7 +20,7 @@ m.out1.pfna_7_age14.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/hil
 
 met_name<- data_c18$Met_id
 
-data = m.out1.pfna_7_age14.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfna7', 'sex',
+data = m.out1.pfna_7_age14.matched[,c(met_name, 'cpfna7', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age14' )]
 
 data.pfna_7.met_at_14 <- cbind(data_hilic[,c("mz","time","Met_id")])

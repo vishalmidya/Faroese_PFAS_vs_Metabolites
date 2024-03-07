@@ -20,7 +20,7 @@ m.out1.pfoa_0_age28.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18
 
 met_name<- data_c18$Met_id
 
-data = m.out1.pfoa_0_age28.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfoa0', 'sex',
+data = m.out1.pfoa_0_age28.matched[,c(met_name, 'cpfoa0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age28' )]
 
 data.pfoa_0.met_at_28 <- cbind(data_c18[,c("mz","time","Met_id")])
