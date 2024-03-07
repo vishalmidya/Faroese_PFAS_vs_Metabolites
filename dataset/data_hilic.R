@@ -90,6 +90,8 @@ dt <- d[which(d$id %in% d1$id),]
 
 # dplyr::select the PFAS exposure columns and covariates
 
+
+
 d <- dt[,c("id",'pfos_0', 'pfos_7', 'pfos_14', 'pfos_22', 'pfos_28', 'pfoa_0', 'pfoa_7', 'pfoa_14', 'pfoa_22', 'pfoa_28', 
            'pfhxs_0', 'pfhxs_7', 'pfhxs_14', 'pfhxs_22', 'pfhxs_28',  'pfna_0', 'pfna_7', 'pfna_14', 'pfna_22', 'pfna_28', 
            'pfda_0', 'pfda_7', 'pfda_14', 'pfda_22', 'pfda_28', 'bmi_28', 'waistcirc_28', 'diaBP_dxt_28', 'sysBP_dxt_28', 
@@ -109,7 +111,7 @@ init = mice(d, maxit=0)
 meth = init$method
 predM = init$predictorMatrix
 set.seed(1234)
-imputed = mice(d, method="norm", predictorMatrix=predM, m=3, ntree = 100)
+imputed = mice(d, method="norm", predictorMatrix=predM, m=3)
 imputed <- complete(imputed, action = 2) # this is your final imputed dataset
 
 
@@ -264,8 +266,8 @@ dim(median_sum_feature_hilic)
 
 
 
-# Characterize metabolites from median_sum_feature_hilic using confirmed metabolites
-median_sum_feature_hilic$Metabolite <- rep(NA_character_, nrow(median_sum_feature_hilic))
+# 3. Characterize metabolites from median_sum_feature_hilic using confirmed metabolites: multiple annotation
+median_sum_feature_hilic$Metabolite_multiple <- rep(NA_character_, nrow(median_sum_feature_hilic))
 median_sum_feature_hilic$seq <- paste0("chem_",seq(1, nrow(median_sum_feature_hilic)))
 
 
@@ -278,30 +280,30 @@ for(i in 1:nrow(median_sum_feature_hilic)){
   if(length(b)!= 0){
     
     dft <- conf_met[conf_met$Metabolite %in% b,c("Metabolite")]
-    median_sum_feature_hilic$Metabolite[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
+    median_sum_feature_hilic$Metabolite_multiple[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
     
   }
 }
 
 
-length(unique(median_sum_feature_hilic$Metabolite)) 
+length(unique(median_sum_feature_hilic$Metabolite_multiple)) 
 # [1] 675
 
 
-length(median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite) == FALSE, ]$Metabolite)
+length(median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite_multiple) == FALSE, ]$Metabolite_multiple)
 # 1107 
 
 
-# median_sum_feature_hilic %>% dplyr::select(mz, time, Metabolite)
+# median_sum_feature_hilic %>% dplyr::select(mz, time, Metabolite_multiple)
 
 
 
-# remove metabolites unable to annotate
-data_hilic <- median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite) == FALSE,c(valid_colnames,"mz","time","seq")]
+# remove Metabolite unable to annotate
+data_hilic <- median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite_multiple) == FALSE,c(valid_colnames,"mz","time","seq","Metabolite_multiple")]
 
 data_hilic$Met_id <- paste0("Met",seq(1:nrow(data_hilic)))
 
-# restrict to only original confirmed metabolites and annotate with closest confirmed metabolite!!!!!!!!!!!!!!!!!!!!!
+# 4. restrict to only original confirmed metabolites and annotate with closest confirmed metabolite
 conf_met_org$mz_ratio <- rep(NA_real_, nrow(conf_met_org))
 conf_met_org$adduct <- rep(NA_character_, nrow(conf_met_org))
 
@@ -410,55 +412,84 @@ dim(merged_met_clinical_hilic)
 
 
 
-# Met data standardization: by metabolite and by year
+# Met data standardization: by metabolite and (not by year: delete group_by(Year) %>% )
 merged_met_clinical_hilic<- merged_met_clinical_hilic %>% 
-  group_by(Year) %>% 
   mutate_at(Met_name, ~(as.numeric(.) %>% as.vector))  %>% 
   mutate_at(Met_name, ~(log(. + 1, base = 2) %>% as.vector))%>% 
-  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) %>% 
-  ungroup()
+  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) 
+
+# impute PFAS value below LOD
+d_subset$pfoa_0<- ifelse(d_subset$pfoa_0 < 0.03, 0.03/sqrt(2), d_subset$pfoa_0)
+d_subset$pfos_0<- ifelse(d_subset$pfos_0 < 0.03, 0.03/sqrt(2), d_subset$pfos_0)
+d_subset$pfhxs_0<- ifelse(d_subset$pfhxs_0 < 0.05, 0.05/sqrt(2), d_subset$pfhxs_0)
+d_subset$pfna_0<- ifelse(d_subset$pfna_0 < 0.05, 0.05/sqrt(2), d_subset$pfna_0)
+d_subset$pfda_0<- ifelse(d_subset$pfoa_0 < 0.03, 0.03/sqrt(2), d_subset$pfda_0)
+
+d_subset$pfoa_7<- ifelse(d_subset$pfoa_7 < 0.03, 0.03/sqrt(2), d_subset$pfoa_7)
+d_subset$pfos_7<- ifelse(d_subset$pfos_7 < 0.03, 0.03/sqrt(2), d_subset$pfos_7)
+d_subset$pfhxs_7<- ifelse(d_subset$pfhxs_7 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_7)
+d_subset$pfna_7<- ifelse(d_subset$pfna_7 < 0.03, 0.03/sqrt(2), d_subset$pfna_7)
+d_subset$pfda_7<- ifelse(d_subset$pfoa_7 < 0.03, 0.03/sqrt(2), d_subset$pfda_7)
+
+d_subset$pfoa_14<- ifelse(d_subset$pfoa_14 < 0.03, 0.03/sqrt(2), d_subset$pfoa_14)
+d_subset$pfos_14<- ifelse(d_subset$pfos_14 < 0.03, 0.03/sqrt(2), d_subset$pfos_14)
+d_subset$pfhxs_14<- ifelse(d_subset$pfhxs_14 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_14)
+d_subset$pfna_14<- ifelse(d_subset$pfna_14 < 0.03, 0.03/sqrt(2), d_subset$pfna_14)
+d_subset$pfda_14<- ifelse(d_subset$pfoa_14 < 0.03, 0.03/sqrt(2), d_subset$pfda_14)
+
+d_subset$pfoa_22<- ifelse(d_subset$pfoa_22 < 0.03, 0.03/sqrt(2), d_subset$pfoa_22)
+d_subset$pfos_22<- ifelse(d_subset$pfos_22 < 0.03, 0.03/sqrt(2), d_subset$pfos_22)
+d_subset$pfhxs_22<- ifelse(d_subset$pfhxs_22 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_22)
+d_subset$pfna_22<- ifelse(d_subset$pfna_22 < 0.03, 0.03/sqrt(2), d_subset$pfna_22)
+d_subset$pfda_22<- ifelse(d_subset$pfoa_22 < 0.03, 0.03/sqrt(2), d_subset$pfda_22)
+
+d_subset$pfoa_28<- ifelse(d_subset$pfoa_28 < 0.03, 0.03/sqrt(2), d_subset$pfoa_28)
+d_subset$pfos_28<- ifelse(d_subset$pfos_28 < 0.03, 0.03/sqrt(2), d_subset$pfos_28)
+d_subset$pfhxs_28<- ifelse(d_subset$pfhxs_28 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_28)
+d_subset$pfna_28<- ifelse(d_subset$pfna_28 < 0.03, 0.03/sqrt(2), d_subset$pfna_28)
+d_subset$pfda_28<- ifelse(d_subset$pfoa_28 < 0.03, 0.03/sqrt(2), d_subset$pfda_28)
 
 
-# combine with dichotomous PFAS
-d_subset$cpfoa0 <- ifelse(d_subset$pfoa_0 > median(d_subset$pfoa_0), 1, 0)
-d_subset$cpfos0 <- ifelse(d_subset$pfos_0 > median(d_subset$pfos_0), 1, 0)
-d_subset$cpfhxs0 <- ifelse(d_subset$pfhxs_0 > median(d_subset$pfhxs_0), 1, 0)
-d_subset$cpfna0 <- ifelse(d_subset$pfna_0 > median(d_subset$pfna_0), 1, 0)
-d_subset$cpfda0 <- ifelse(d_subset$pfda_0 > median(d_subset$pfda_0), 1, 0)
 
 
-d_subset$cpfoa7 <- ifelse(d_subset$pfoa_7 > median(d_subset$pfoa_7), 1, 0)
-d_subset$cpfos7 <- ifelse(d_subset$pfos_7 > median(d_subset$pfos_7), 1, 0)
-d_subset$cpfhxs7 <- ifelse(d_subset$pfhxs_7 > median(d_subset$pfhxs_7), 1, 0)
-d_subset$cpfna7 <- ifelse(d_subset$pfna_7 > median(d_subset$pfna_7), 1, 0)
-d_subset$cpfda7 <- ifelse(d_subset$pfda_7 > median(d_subset$pfda_7), 1, 0)
+merged_met_clinical_hilic <- merge(merged_met_clinical_hilic, d_subset[,c("id",
+                                                                          "pfoa_0","pfos_0","pfhxs_0","pfna_0","pfda_0",
+                                                                          "pfoa_7","pfos_7","pfhxs_7","pfna_7","pfda_7",
+                                                                          "pfoa_14","pfos_14","pfhxs_14","pfna_14","pfda_14",
+                                                                          "pfoa_22","pfos_22","pfhxs_22","pfna_22","pfda_22",
+                                                                          "pfoa_28","pfos_28","pfhxs_28","pfna_28","pfda_28")],by = "id")
 
-d_subset$cpfoa14 <- ifelse(d_subset$pfoa_14 > median(d_subset$pfoa_14), 1, 0)
-d_subset$cpfos14 <- ifelse(d_subset$pfos_14 > median(d_subset$pfos_14), 1, 0)
-d_subset$cpfhxs14 <- ifelse(d_subset$pfhxs_14 > median(d_subset$pfhxs_14), 1, 0)
-d_subset$cpfna14 <- ifelse(d_subset$pfna_14 > median(d_subset$pfna_14), 1, 0)
-d_subset$cpfda14 <- ifelse(d_subset$pfda_14 > median(d_subset$pfda_14), 1, 0)
-
-d_subset$cpfoa22 <- ifelse(d_subset$pfoa_22 > median(d_subset$pfoa_22), 1, 0)
-d_subset$cpfos22 <- ifelse(d_subset$pfos_22 > median(d_subset$pfos_22), 1, 0)
-d_subset$cpfhxs22 <- ifelse(d_subset$pfhxs_22 > median(d_subset$pfhxs_22), 1, 0)
-d_subset$cpfna22 <- ifelse(d_subset$pfna_22 > median(d_subset$pfna_22), 1, 0)
-d_subset$cpfda22 <- ifelse(d_subset$pfda_22 > median(d_subset$pfda_22), 1, 0)
-
-d_subset$cpfoa28 <- ifelse(d_subset$pfoa_28 > median(d_subset$pfoa_28), 1, 0)
-d_subset$cpfos28 <- ifelse(d_subset$pfos_28 > median(d_subset$pfos_28), 1, 0)
-d_subset$cpfhxs28 <- ifelse(d_subset$pfhxs_28 > median(d_subset$pfhxs_28), 1, 0)
-d_subset$cpfna28 <- ifelse(d_subset$pfna_28 > median(d_subset$pfna_28), 1, 0)
-d_subset$cpfda28 <- ifelse(d_subset$pfda_28 > median(d_subset$pfda_28), 1, 0)
+# dichotomous PFAS
+merged_met_clinical_hilic$cpfoa0 <- ifelse(merged_met_clinical_hilic$pfoa_0 > median(merged_met_clinical_hilic$pfoa_0), 1, 0)
+merged_met_clinical_hilic$cpfos0 <- ifelse(merged_met_clinical_hilic$pfos_0 > median(merged_met_clinical_hilic$pfos_0), 1, 0)
+merged_met_clinical_hilic$cpfhxs0 <- ifelse(merged_met_clinical_hilic$pfhxs_0 > median(merged_met_clinical_hilic$pfhxs_0), 1, 0)
+merged_met_clinical_hilic$cpfna0 <- ifelse(merged_met_clinical_hilic$pfna_0 > median(merged_met_clinical_hilic$pfna_0), 1, 0)
+merged_met_clinical_hilic$cpfda0 <- ifelse(merged_met_clinical_hilic$pfda_0 > median(merged_met_clinical_hilic$pfda_0), 1, 0)
 
 
-merged_met_clinical_hilic <- merge(merged_met_clinical_hilic, d_subset[,c("pfoa_0","pfos_0","pfhxs_0","pfna_0","pfda_0","id",
-                                                                          "cpfoa0","cpfos0","cpfhxs0","cpfna0","cpfda0",
-                                                                          "cpfoa7","cpfos7","cpfhxs7","cpfna7","cpfda7",
-                                                                          "cpfoa14","cpfos14","cpfhxs14","cpfna14","cpfda14",
-                                                                          "cpfoa22","cpfos22","cpfhxs22","cpfna22","cpfda22",
-                                                                          "cpfoa28","cpfos28","cpfhxs28","cpfna28","cpfda28")],by = "id")
+merged_met_clinical_hilic$cpfoa7 <- ifelse(merged_met_clinical_hilic$pfoa_7 > median(merged_met_clinical_hilic$pfoa_7), 1, 0)
+merged_met_clinical_hilic$cpfos7 <- ifelse(merged_met_clinical_hilic$pfos_7 > median(merged_met_clinical_hilic$pfos_7), 1, 0)
+merged_met_clinical_hilic$cpfhxs7 <- ifelse(merged_met_clinical_hilic$pfhxs_7 > median(merged_met_clinical_hilic$pfhxs_7), 1, 0)
+merged_met_clinical_hilic$cpfna7 <- ifelse(merged_met_clinical_hilic$pfna_7 > median(merged_met_clinical_hilic$pfna_7), 1, 0)
+merged_met_clinical_hilic$cpfda7 <- ifelse(merged_met_clinical_hilic$pfda_7 > median(merged_met_clinical_hilic$pfda_7), 1, 0)
 
+merged_met_clinical_hilic$cpfoa14 <- ifelse(merged_met_clinical_hilic$pfoa_14 > median(merged_met_clinical_hilic$pfoa_14), 1, 0)
+merged_met_clinical_hilic$cpfos14 <- ifelse(merged_met_clinical_hilic$pfos_14 > median(merged_met_clinical_hilic$pfos_14), 1, 0)
+merged_met_clinical_hilic$cpfhxs14 <- ifelse(merged_met_clinical_hilic$pfhxs_14 > median(merged_met_clinical_hilic$pfhxs_14), 1, 0)
+merged_met_clinical_hilic$cpfna14 <- ifelse(merged_met_clinical_hilic$pfna_14 > median(merged_met_clinical_hilic$pfna_14), 1, 0)
+merged_met_clinical_hilic$cpfda14 <- ifelse(merged_met_clinical_hilic$pfda_14 > median(merged_met_clinical_hilic$pfda_14), 1, 0)
+
+merged_met_clinical_hilic$cpfoa22 <- ifelse(merged_met_clinical_hilic$pfoa_22 > median(merged_met_clinical_hilic$pfoa_22), 1, 0)
+merged_met_clinical_hilic$cpfos22 <- ifelse(merged_met_clinical_hilic$pfos_22 > median(merged_met_clinical_hilic$pfos_22), 1, 0)
+merged_met_clinical_hilic$cpfhxs22 <- ifelse(merged_met_clinical_hilic$pfhxs_22 > median(merged_met_clinical_hilic$pfhxs_22), 1, 0)
+merged_met_clinical_hilic$cpfna22 <- ifelse(merged_met_clinical_hilic$pfna_22 > median(merged_met_clinical_hilic$pfna_22), 1, 0)
+merged_met_clinical_hilic$cpfda22 <- ifelse(merged_met_clinical_hilic$pfda_22 > median(merged_met_clinical_hilic$pfda_22), 1, 0)
+
+merged_met_clinical_hilic$cpfoa28 <- ifelse(merged_met_clinical_hilic$pfoa_28 > median(merged_met_clinical_hilic$pfoa_28), 1, 0)
+merged_met_clinical_hilic$cpfos28 <- ifelse(merged_met_clinical_hilic$pfos_28 > median(merged_met_clinical_hilic$pfos_28), 1, 0)
+merged_met_clinical_hilic$cpfhxs28 <- ifelse(merged_met_clinical_hilic$pfhxs_28 > median(merged_met_clinical_hilic$pfhxs_28), 1, 0)
+merged_met_clinical_hilic$cpfna28 <- ifelse(merged_met_clinical_hilic$pfna_28 > median(merged_met_clinical_hilic$pfna_28), 1, 0)
+merged_met_clinical_hilic$cpfda28 <- ifelse(merged_met_clinical_hilic$pfda_28 > median(merged_met_clinical_hilic$pfda_28), 1, 0)
 
 
 # reformate variables

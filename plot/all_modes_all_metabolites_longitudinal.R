@@ -59,6 +59,7 @@ library(data.table)
 library(ggrepel)
 library(mice)
 library(ggrepel)
+library(patchwork)
 
 data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
 data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
@@ -66,10 +67,8 @@ data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_fa
 pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/pfas_met_tab_all.csv", check.names = F)
 
 ## AGE 0
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met867" & pfas_met_tab_all$PFAS == "PFOA") & pfas_met_tab_all$Mode == "HILIC"| 
-                                    (pfas_met_tab_all$Met_id == "Met258" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met300" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode == "C18")| 
-                                    (pfas_met_tab_all$Met_id == "Met314" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode == "C18")| 
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met258" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
+                                    (pfas_met_tab_all$Met_id == "Met109" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "C18")| 
                                     (pfas_met_tab_all$Met_id == "Met580" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "C18"),]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "0", ]
 
@@ -96,8 +95,7 @@ pfas7 <- pfas_met_tab
 
 ## AGE 14
 
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met519" & pfas_met_tab_all$PFAS == "PFHxS" & pfas_met_tab_all$Mode =="HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met793" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met793" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
                                     (pfas_met_tab_all$Met_id == "Met438" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode =="C18"),]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "14", ]
 dim(pfas_met_tab)
@@ -109,23 +107,19 @@ pfas14 <- pfas_met_tab
 
 ## AGE 22
 
-pfas_met_tab <- pfas_met_tab_all[(pfas_met_tab_all$Met_id == "Met120" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met190" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met206" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")|
+pfas_met_tab <- pfas_met_tab_all[(pfas_met_tab_all$Met_id == "Met190" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
+                                   (pfas_met_tab_all$Met_id == "Met260" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")|
                                    (pfas_met_tab_all$Met_id == "Met267" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") |
                                    (pfas_met_tab_all$Met_id == "Met348" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
                                    (pfas_met_tab_all$Met_id == "Met583" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met676" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met677" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met728" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
                                    (pfas_met_tab_all$Met_id == "Met780" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
+                                   (pfas_met_tab_all$Met_id == "Met262" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
                                    (pfas_met_tab_all$Met_id == "Met610" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
                                    (pfas_met_tab_all$Met_id == "Met742" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
                                    (pfas_met_tab_all$Met_id == "Met79" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC")|
                                    (pfas_met_tab_all$Met_id == "Met86" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC") | 
                                    (pfas_met_tab_all$Met_id == "Met886" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met977" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met452" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="C18"),]
+                                   (pfas_met_tab_all$Met_id == "Met219" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="C18"),]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "22", ]
 
 dim(pfas_met_tab)

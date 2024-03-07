@@ -2,12 +2,11 @@ library(foreach)
 library(doParallel)
 library(car)
 library(MASS)
-library(ggplot2)
+library(tidyverse)
 library(data.table)
 library(iterators)
 library(parallel)
 library(carData)
-
 
 cores=detectCores()
 cl <- makeCluster(10) 
@@ -15,11 +14,18 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
+
 data_c18 <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/data_c18.csv", check.names = F)
 m.out1.pfda_0_age7.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_0/minerva_data_pfda_0_metabolites_7/matched_data_pfda_at_0_met_at_7.csv")
 
-data = m.out1.pfda_0_age7.matched[,c(paste0("Met",seq(1:nrow(data_c18))), 'cpfda0', 'sex',
+
+##################################!!!!
+met_name<- data_c18$Met_id
+
+data = m.out1.pfda_0_age7.matched[,c(met_name, 'cpfda0', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age7' )]
+
+
 
 data.pfda_0.met_at_7 <- cbind(data_c18[,c("mz","time","Met_id")])
 data.pfda_0.met_at_7$beta <- rep(NA_real_, nrow(data.pfda_0.met_at_7))
@@ -35,7 +41,7 @@ comb <- function(x, ...) {
 
 oper <- foreach(i=1:nrow(data.pfda_0.met_at_7), .combine='comb', .multicombine=TRUE,
                 .init=list(list(), list())) %dopar% {
-                  exposure <- paste0("Met",i)
+                  exposure <- met_name[i]
                   model <- (lm(data[,i] ~ cpfda0 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data = data))
                   s <- summary(model)
                   list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"])

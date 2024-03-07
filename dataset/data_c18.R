@@ -263,7 +263,7 @@ dim(median_sum_feature_c18)
 
 
 # Characterize metabolites from median_sum_feature_c18 using confirmed metabolites
-median_sum_feature_c18$Metabolite <- rep(NA_character_, nrow(median_sum_feature_c18))
+median_sum_feature_c18$Metabolite_multiple <- rep(NA_character_, nrow(median_sum_feature_c18))
 median_sum_feature_c18$seq <- paste0("chem_",seq(1, nrow(median_sum_feature_c18)))
 
 
@@ -276,26 +276,26 @@ for(i in 1:nrow(median_sum_feature_c18)){
   if(length(b)!= 0){
     
     dft <- conf_met[conf_met$Metabolite %in% b,c("Metabolite")]
-    median_sum_feature_c18$Metabolite[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
+    median_sum_feature_c18$Metabolite_multiple[i] = knitr::combine_words(unique(dft), and = "", sep = "/")
     
   }
 }
 
 
-length(unique(median_sum_feature_c18$Metabolite)) 
+length(unique(median_sum_feature_c18$Metabolite_multiple)) 
 # [1] 323
 
 
-length(median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite) == FALSE, ]$Metabolite)
+length(median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite_multiple) == FALSE, ]$Metabolite_multiple)
 # 652 
 
 
-# median_sum_feature_c18 %>% dplyr::select(mz, time, Metabolite)
+# median_sum_feature_c18 %>% dplyr::select(mz, time, Metabolite_multiple)
 
 
 
-# remove metabolites unable to annotate
-data_c18 <- median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite) == FALSE,c(valid_colnames,"mz","time","seq")]
+# remove Metabolite_multiples unable to annotate
+data_c18 <- median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite_multiple) == FALSE,c(valid_colnames,"mz","time","seq","Metabolite_multiple")]
 
 
 data_c18$Met_id <- paste0("Met",seq(1:nrow(data_c18)))
@@ -364,6 +364,7 @@ dim(data_c18)
 keep_metabolites_c18 = data.frame(Met_id = data_c18$Met_id)
 
 write.csv(data_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", row.names = F)
+
 write.csv(keep_metabolites_c18, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/keep_metabolites_c18.csv", row.names = F)
 
 ################################################################################################################
@@ -408,55 +409,84 @@ dim(merged_met_clinical_c18)
 
 
 
-# Met data standardization: by metabolite and by year
+# Met data standardization: by metabolite and not by year (group_by(Year) %>% )
 merged_met_clinical_c18<- merged_met_clinical_c18 %>% 
-  group_by(Year) %>% 
   mutate_at(Met_name, ~(as.numeric(.) %>% as.vector))  %>% 
   mutate_at(Met_name, ~(log(. + 1, base = 2) %>% as.vector))%>% 
-  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) %>% 
-  ungroup()
+  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) 
+
+# impute PFAS value below LOD
+d_subset$pfoa_0<- ifelse(d_subset$pfoa_0 < 0.03, 0.03/sqrt(2), d_subset$pfoa_0)
+d_subset$pfos_0<- ifelse(d_subset$pfos_0 < 0.03, 0.03/sqrt(2), d_subset$pfos_0)
+d_subset$pfhxs_0<- ifelse(d_subset$pfhxs_0 < 0.05, 0.05/sqrt(2), d_subset$pfhxs_0)
+d_subset$pfna_0<- ifelse(d_subset$pfna_0 < 0.05, 0.05/sqrt(2), d_subset$pfna_0)
+d_subset$pfda_0<- ifelse(d_subset$pfoa_0 < 0.03, 0.03/sqrt(2), d_subset$pfda_0)
+
+d_subset$pfoa_7<- ifelse(d_subset$pfoa_7 < 0.03, 0.03/sqrt(2), d_subset$pfoa_7)
+d_subset$pfos_7<- ifelse(d_subset$pfos_7 < 0.03, 0.03/sqrt(2), d_subset$pfos_7)
+d_subset$pfhxs_7<- ifelse(d_subset$pfhxs_7 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_7)
+d_subset$pfna_7<- ifelse(d_subset$pfna_7 < 0.03, 0.03/sqrt(2), d_subset$pfna_7)
+d_subset$pfda_7<- ifelse(d_subset$pfoa_7 < 0.03, 0.03/sqrt(2), d_subset$pfda_7)
+
+d_subset$pfoa_14<- ifelse(d_subset$pfoa_14 < 0.03, 0.03/sqrt(2), d_subset$pfoa_14)
+d_subset$pfos_14<- ifelse(d_subset$pfos_14 < 0.03, 0.03/sqrt(2), d_subset$pfos_14)
+d_subset$pfhxs_14<- ifelse(d_subset$pfhxs_14 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_14)
+d_subset$pfna_14<- ifelse(d_subset$pfna_14 < 0.03, 0.03/sqrt(2), d_subset$pfna_14)
+d_subset$pfda_14<- ifelse(d_subset$pfoa_14 < 0.03, 0.03/sqrt(2), d_subset$pfda_14)
+
+d_subset$pfoa_22<- ifelse(d_subset$pfoa_22 < 0.03, 0.03/sqrt(2), d_subset$pfoa_22)
+d_subset$pfos_22<- ifelse(d_subset$pfos_22 < 0.03, 0.03/sqrt(2), d_subset$pfos_22)
+d_subset$pfhxs_22<- ifelse(d_subset$pfhxs_22 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_22)
+d_subset$pfna_22<- ifelse(d_subset$pfna_22 < 0.03, 0.03/sqrt(2), d_subset$pfna_22)
+d_subset$pfda_22<- ifelse(d_subset$pfoa_22 < 0.03, 0.03/sqrt(2), d_subset$pfda_22)
+
+d_subset$pfoa_28<- ifelse(d_subset$pfoa_28 < 0.03, 0.03/sqrt(2), d_subset$pfoa_28)
+d_subset$pfos_28<- ifelse(d_subset$pfos_28 < 0.03, 0.03/sqrt(2), d_subset$pfos_28)
+d_subset$pfhxs_28<- ifelse(d_subset$pfhxs_28 < 0.03, 0.03/sqrt(2), d_subset$pfhxs_28)
+d_subset$pfna_28<- ifelse(d_subset$pfna_28 < 0.03, 0.03/sqrt(2), d_subset$pfna_28)
+d_subset$pfda_28<- ifelse(d_subset$pfoa_28 < 0.03, 0.03/sqrt(2), d_subset$pfda_28)
 
 
-# combine with dichotomous PFAS
-d_subset$cpfoa0 <- ifelse(d_subset$pfoa_0 > median(d_subset$pfoa_0), 1, 0)
-d_subset$cpfos0 <- ifelse(d_subset$pfos_0 > median(d_subset$pfos_0), 1, 0)
-d_subset$cpfhxs0 <- ifelse(d_subset$pfhxs_0 > median(d_subset$pfhxs_0), 1, 0)
-d_subset$cpfna0 <- ifelse(d_subset$pfna_0 > median(d_subset$pfna_0), 1, 0)
-d_subset$cpfda0 <- ifelse(d_subset$pfda_0 > median(d_subset$pfda_0), 1, 0)
-
-
-d_subset$cpfoa7 <- ifelse(d_subset$pfoa_7 > median(d_subset$pfoa_7), 1, 0)
-d_subset$cpfos7 <- ifelse(d_subset$pfos_7 > median(d_subset$pfos_7), 1, 0)
-d_subset$cpfhxs7 <- ifelse(d_subset$pfhxs_7 > median(d_subset$pfhxs_7), 1, 0)
-d_subset$cpfna7 <- ifelse(d_subset$pfna_7 > median(d_subset$pfna_7), 1, 0)
-d_subset$cpfda7 <- ifelse(d_subset$pfda_7 > median(d_subset$pfda_7), 1, 0)
-
-d_subset$cpfoa14 <- ifelse(d_subset$pfoa_14 > median(d_subset$pfoa_14), 1, 0)
-d_subset$cpfos14 <- ifelse(d_subset$pfos_14 > median(d_subset$pfos_14), 1, 0)
-d_subset$cpfhxs14 <- ifelse(d_subset$pfhxs_14 > median(d_subset$pfhxs_14), 1, 0)
-d_subset$cpfna14 <- ifelse(d_subset$pfna_14 > median(d_subset$pfna_14), 1, 0)
-d_subset$cpfda14 <- ifelse(d_subset$pfda_14 > median(d_subset$pfda_14), 1, 0)
-
-d_subset$cpfoa22 <- ifelse(d_subset$pfoa_22 > median(d_subset$pfoa_22), 1, 0)
-d_subset$cpfos22 <- ifelse(d_subset$pfos_22 > median(d_subset$pfos_22), 1, 0)
-d_subset$cpfhxs22 <- ifelse(d_subset$pfhxs_22 > median(d_subset$pfhxs_22), 1, 0)
-d_subset$cpfna22 <- ifelse(d_subset$pfna_22 > median(d_subset$pfna_22), 1, 0)
-d_subset$cpfda22 <- ifelse(d_subset$pfda_22 > median(d_subset$pfda_22), 1, 0)
-
-d_subset$cpfoa28 <- ifelse(d_subset$pfoa_28 > median(d_subset$pfoa_28), 1, 0)
-d_subset$cpfos28 <- ifelse(d_subset$pfos_28 > median(d_subset$pfos_28), 1, 0)
-d_subset$cpfhxs28 <- ifelse(d_subset$pfhxs_28 > median(d_subset$pfhxs_28), 1, 0)
-d_subset$cpfna28 <- ifelse(d_subset$pfna_28 > median(d_subset$pfna_28), 1, 0)
-d_subset$cpfda28 <- ifelse(d_subset$pfda_28 > median(d_subset$pfda_28), 1, 0)
 
 
 merged_met_clinical_c18 <- merge(merged_met_clinical_c18, d_subset[,c("pfoa_0","pfos_0","pfhxs_0","pfna_0","pfda_0","id",
-                                                                          "cpfoa0","cpfos0","cpfhxs0","cpfna0","cpfda0",
-                                                                          "cpfoa7","cpfos7","cpfhxs7","cpfna7","cpfda7",
-                                                                          "cpfoa14","cpfos14","cpfhxs14","cpfna14","cpfda14",
-                                                                          "cpfoa22","cpfos22","cpfhxs22","cpfna22","cpfda22",
-                                                                          "cpfoa28","cpfos28","cpfhxs28","cpfna28","cpfda28")],by = "id")
+                                                                      "pfoa_7","pfos_7","pfhxs_7","pfna_7","pfda_7",
+                                                                      "pfoa_14","pfos_14","pfhxs_14","pfna_14","pfda_14",
+                                                                      "pfoa_22","pfos_22","pfhxs_22","pfna_22","pfda_22",
+                                                                      "pfoa_28","pfos_28","pfhxs_28","pfna_28","pfda_28")],by = "id")
 
+
+# combine with dichotomous PFAS
+merged_met_clinical_c18$cpfoa0 <- ifelse(merged_met_clinical_c18$pfoa_0 > median(merged_met_clinical_c18$pfoa_0), 1, 0)
+merged_met_clinical_c18$cpfos0 <- ifelse(merged_met_clinical_c18$pfos_0 > median(merged_met_clinical_c18$pfos_0), 1, 0)
+merged_met_clinical_c18$cpfhxs0 <- ifelse(merged_met_clinical_c18$pfhxs_0 > median(merged_met_clinical_c18$pfhxs_0), 1, 0)
+merged_met_clinical_c18$cpfna0 <- ifelse(merged_met_clinical_c18$pfna_0 > median(merged_met_clinical_c18$pfna_0), 1, 0)
+merged_met_clinical_c18$cpfda0 <- ifelse(merged_met_clinical_c18$pfda_0 > median(merged_met_clinical_c18$pfda_0), 1, 0)
+
+
+merged_met_clinical_c18$cpfoa7 <- ifelse(merged_met_clinical_c18$pfoa_7 > median(merged_met_clinical_c18$pfoa_7), 1, 0)
+merged_met_clinical_c18$cpfos7 <- ifelse(merged_met_clinical_c18$pfos_7 > median(merged_met_clinical_c18$pfos_7), 1, 0)
+merged_met_clinical_c18$cpfhxs7 <- ifelse(merged_met_clinical_c18$pfhxs_7 > median(merged_met_clinical_c18$pfhxs_7), 1, 0)
+merged_met_clinical_c18$cpfna7 <- ifelse(merged_met_clinical_c18$pfna_7 > median(merged_met_clinical_c18$pfna_7), 1, 0)
+merged_met_clinical_c18$cpfda7 <- ifelse(merged_met_clinical_c18$pfda_7 > median(merged_met_clinical_c18$pfda_7), 1, 0)
+
+merged_met_clinical_c18$cpfoa14 <- ifelse(merged_met_clinical_c18$pfoa_14 > median(merged_met_clinical_c18$pfoa_14), 1, 0)
+merged_met_clinical_c18$cpfos14 <- ifelse(merged_met_clinical_c18$pfos_14 > median(merged_met_clinical_c18$pfos_14), 1, 0)
+merged_met_clinical_c18$cpfhxs14 <- ifelse(merged_met_clinical_c18$pfhxs_14 > median(merged_met_clinical_c18$pfhxs_14), 1, 0)
+merged_met_clinical_c18$cpfna14 <- ifelse(merged_met_clinical_c18$pfna_14 > median(merged_met_clinical_c18$pfna_14), 1, 0)
+merged_met_clinical_c18$cpfda14 <- ifelse(merged_met_clinical_c18$pfda_14 > median(merged_met_clinical_c18$pfda_14), 1, 0)
+
+merged_met_clinical_c18$cpfoa22 <- ifelse(merged_met_clinical_c18$pfoa_22 > median(merged_met_clinical_c18$pfoa_22), 1, 0)
+merged_met_clinical_c18$cpfos22 <- ifelse(merged_met_clinical_c18$pfos_22 > median(merged_met_clinical_c18$pfos_22), 1, 0)
+merged_met_clinical_c18$cpfhxs22 <- ifelse(merged_met_clinical_c18$pfhxs_22 > median(merged_met_clinical_c18$pfhxs_22), 1, 0)
+merged_met_clinical_c18$cpfna22 <- ifelse(merged_met_clinical_c18$pfna_22 > median(merged_met_clinical_c18$pfna_22), 1, 0)
+merged_met_clinical_c18$cpfda22 <- ifelse(merged_met_clinical_c18$pfda_22 > median(merged_met_clinical_c18$pfda_22), 1, 0)
+
+merged_met_clinical_c18$cpfoa28 <- ifelse(merged_met_clinical_c18$pfoa_28 > median(merged_met_clinical_c18$pfoa_28), 1, 0)
+merged_met_clinical_c18$cpfos28 <- ifelse(merged_met_clinical_c18$pfos_28 > median(merged_met_clinical_c18$pfos_28), 1, 0)
+merged_met_clinical_c18$cpfhxs28 <- ifelse(merged_met_clinical_c18$pfhxs_28 > median(merged_met_clinical_c18$pfhxs_28), 1, 0)
+merged_met_clinical_c18$cpfna28 <- ifelse(merged_met_clinical_c18$pfna_28 > median(merged_met_clinical_c18$pfna_28), 1, 0)
+merged_met_clinical_c18$cpfda28 <- ifelse(merged_met_clinical_c18$pfda_28 > median(merged_met_clinical_c18$pfda_28), 1, 0)
 
 
 # reformate variables

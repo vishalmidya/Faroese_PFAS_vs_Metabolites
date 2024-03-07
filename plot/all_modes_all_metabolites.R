@@ -60,9 +60,6 @@ library(mice)
 library(ggrepel)
 
 
-pfda_hilic_22_28 <- read.table("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Documents/Projects/Faroese_Minerva/input/pfda_22_met_28_beta_fisher_hilic.txt", header = T)
-
-pfda_hilic_14_22 <- read.table("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Documents/Projects/Faroese_Minerva/input/pfda_14_met_22_beta_fisher_hilic.txt", header = T)
 
 data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
 data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
@@ -74,9 +71,9 @@ data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_fa
 pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_0_metabolites_all_C18.txt", header = T)
 pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_0_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
-                   inner_join(data_c18[, c("Met_id", "Metabolite")], by = "Met_id") ########## annotate metabolites
+                   inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id") ########## annotate metabolites
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
-                   inner_join(data_hilic[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_hilic[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 
 
 pfas_met_tab_0 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
@@ -87,9 +84,9 @@ pfas_met_tab_0$PFAS_age <- rep("0", nrow(pfas_met_tab_0))
 pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_7_metabolites_all_C18.txt", header = T)
 pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_7_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
-                   inner_join(data_c18[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
-                   inner_join(data_hilic[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_hilic[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 
 pfas_met_tab_7 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
 pfas_met_tab_7$PFAS_age <- rep("7", nrow(pfas_met_tab_7))
@@ -99,9 +96,9 @@ pfas_met_tab_7$PFAS_age <- rep("7", nrow(pfas_met_tab_7))
 pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_14_metabolites_all_C18.txt", header = T)
 pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_14_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
-                   inner_join(data_c18[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
-                   inner_join(data_hilic[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_hilic[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 
 pfas_met_tab_14 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
 pfas_met_tab_14$PFAS_age <- rep("14", nrow(pfas_met_tab_14))
@@ -112,9 +109,9 @@ pfas_met_tab_14$PFAS_age <- rep("14", nrow(pfas_met_tab_14))
 pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_22_metabolites_all_C18.txt", header = T)
 pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_22_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
-                   inner_join(data_c18[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
-                   inner_join(data_hilic[, c("Met_id", "Metabolite")], by = "Met_id")
+                   inner_join(data_hilic[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 
 pfas_met_tab_22 <- rbind(pfas_met_tab_HILIC, pfas_met_tab_C18)
 pfas_met_tab_22$PFAS_age <- rep("22", nrow(pfas_met_tab_22))
@@ -210,7 +207,7 @@ table(pfas_met_tab$Age)
 pfas22 <- pfas_met_tab
 
 all_sig_hits <- rbind(pfas0,pfas7,pfas14,pfas22)
-all_sig_hits <- all_sig_hits[,c("Metabolite","mz","time","beta","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval")]
+all_sig_hits <- all_sig_hits[,c("Metabolite","Metabolite_multiple","mz","time","beta","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval")]
 
 
 write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_closest.csv", row.names = F )

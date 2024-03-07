@@ -7,7 +7,7 @@ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age22
 
 merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", check.names = F)
 
-m.out1.pfos22_age22 <- matchit(cpfos22 ~  sex + mage  + smokepreg_2 + cmatfishpreg  + cparity + age22, 
+m.out1.pfos22_age22 <- matchit(cpfos22 ~  sex + mage  + smokepreg_2  + cparity, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.05)
 
@@ -16,7 +16,7 @@ f <- love.plot(m.out1.pfos22_age22)
 f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , linetype="dotted",  color = "black", size=1.5) + geom_vline(xintercept  = -0.1 , linetype="dotted", color = "black", size=1.5)
 
 
-m.out1.pfos22_age28 <- matchit(cpfos22 ~  sex + mage  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
+m.out1.pfos22_age28 <- matchit(cpfos22 ~  sex  + cmatfishpreg  + cparity + age28, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.05)
 
