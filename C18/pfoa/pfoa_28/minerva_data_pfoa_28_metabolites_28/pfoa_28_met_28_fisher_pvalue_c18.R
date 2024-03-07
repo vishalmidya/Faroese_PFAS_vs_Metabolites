@@ -37,7 +37,7 @@ comb <- function(x, ...) {
 
 oper <- foreach(i=1:nrow(data.pfoa_28.met_at_28), .combine='comb', .multicombine=TRUE,
                 .init=list(list(), list())) %dopar% {
-                  exposure <- paste0("Met",i)
+                  exposure <- met_name[i]
                   model <- (lm(data[,i] ~ cpfoa28 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age28, data = data))
                   s <- summary(model)
                   list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"])
