@@ -18,6 +18,8 @@ start.time <- Sys.time()
 data_hilic <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/data_hilic.csv", check.names = F)
 m.out1.pfoa_22_age22.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_22/minerva_data_pfoa_22_metabolites_22/matched_data_pfoa_at_22_met_at_22.csv")
 
+met_name<- data_c18$Met_id
+
 data = m.out1.pfoa_22_age22.matched[,c(paste0("Met",seq(1:nrow(data_hilic))), 'cpfoa22', 'sex',
                                     'mage',  'mbmi', 'smokepreg_2', 'cmatfishpreg', 'cparity', 'age22' )]
 
