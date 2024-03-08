@@ -23,7 +23,7 @@ c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
 
 d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfna/pfna_22/minerva_data_pfna_22_metabolites_28/pfna_22_met_28_hypothetical_test_stat_hilic.txt")
 
-d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_22/minerva_data_pfna_22_metabolites_28/pfna_22_met_28_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
+d8 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfna/pfna_22/minerva_data_pfna_22_metabolites_28/pfna_22_met_28_hypothetical_test_stat_c18.txt") 
 
 test_stat_table <- as.data.frame(cbind(d4, d8))
 
