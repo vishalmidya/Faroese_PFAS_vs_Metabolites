@@ -21,9 +21,9 @@ c18_metid<- keep_metabolites_c18$Met_id
 hilic_resultsid<- gsub("Met", "result.", keep_metabolites_hilic$Met_id)
 c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
 
-d2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_14/pfda_7_met_14_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
-d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_22/pfda_7_met_22_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
-d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_28/pfda_7_met_28_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
+d2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_14/pfda_7_met_14_hypothetical_test_stat_hilic.txt")
+d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_22/pfda_7_met_22_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_7/minerva_data_pfda_7_metabolites_28/pfda_7_met_28_hypothetical_test_stat_hilic.txt")
 
 d6 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_7/minerva_data_pfda_7_metabolites_14/pfda_7_met_14_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
 d7 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfda/pfda_7/minerva_data_pfda_7_metabolites_22/pfda_7_met_22_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))

@@ -21,10 +21,10 @@ c18_metid<- keep_metabolites_c18$Met_id
 hilic_resultsid<- gsub("Met", "result.", keep_metabolites_hilic$Met_id)
 c18_resultsid<- gsub("Met", "result.", keep_metabolites_c18$Met_id)
 
-d1 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_7/pfoa_0_met_7_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
-d2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_14/pfoa_0_met_14_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
-d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_22/pfoa_0_met_22_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
-d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_28/pfoa_0_met_28_hypothetical_test_stat_hilic.txt")%>% select(all_of(hilic_resultsid))
+d1 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_7/pfoa_0_met_7_hypothetical_test_stat_hilic.txt")
+d2 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_14/pfoa_0_met_14_hypothetical_test_stat_hilic.txt")
+d3 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_22/pfoa_0_met_22_hypothetical_test_stat_hilic.txt")
+d4 <- fread("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_28/pfoa_0_met_28_hypothetical_test_stat_hilic.txt")
 
 d5 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_7/pfoa_0_met_7_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
 d6 <- fread("/sc/arion/projects/Faroese/pfas_met/c18/pfoa/pfoa_0/minerva_data_pfoa_0_metabolites_14/pfoa_0_met_14_hypothetical_test_stat_c18.txt") %>% select(all_of(c18_resultsid))
