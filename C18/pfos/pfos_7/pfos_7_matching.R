@@ -23,7 +23,7 @@ f + labs(title  = "caliper = 0.5\n Metabolites at age 7 vs. pfos ", x= "Standard
 
 
 #---------------------------  at age 14
-m.out1.pfos7_age14 <- matchit(cpfos7 ~ sex  + smokepreg_2 + cmatfishpreg  + cparity + age14,
+m.out1.pfos7_age14 <- matchit(cpfos7 ~ sex  + smokepreg_2 + cmatfishpreg + age14,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.5)
 

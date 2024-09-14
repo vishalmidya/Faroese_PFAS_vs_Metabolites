@@ -182,6 +182,8 @@ length(valid_colnames)/4      # 309  - year_id
 
 # Metabolites data filtering
 
+
+################################################################################
 ## 1. confirmed metabolites
 
 ### a). import confirmed metabolites, with additional metabolites
@@ -303,6 +305,14 @@ data_hilic <- median_sum_feature_hilic[is.na(median_sum_feature_hilic$Metabolite
 
 data_hilic$Met_id <- paste0("Met",seq(1:nrow(data_hilic)))
 
+
+################################################################################
+
+
+
+
+################################################################################
+
 # 4. restrict to only original confirmed metabolites and annotate with closest confirmed metabolite
 conf_met_org$mz_ratio <- rep(NA_real_, nrow(conf_met_org))
 conf_met_org$adduct <- rep(NA_character_, nrow(conf_met_org))
@@ -319,6 +329,7 @@ for(i in 1:nrow(conf_met_org)){
 
 dim(conf_met_org)
 
+##### clean metabolites: remove unknown m/z or time
 conf_met_org<- conf_met_org %>% 
   filter(is.na(time)==FALSE & is.na(mz_ratio)==FALSE)
 
@@ -326,7 +337,7 @@ dim(conf_met_org)
 
 
 conf_met<- conf_met_org %>% 
-  filter(Method.RT == "HILIC+") %>% 
+  filter(Method.RT != "C18-") %>% 
   dplyr::select(Metabolite, mz_ratio, time, Method.RT)
 
 dim(conf_met)
@@ -405,8 +416,8 @@ nrow(merged_met_clinical_hilic %>% filter(Year == "14"))
 nrow(merged_met_clinical_hilic %>% filter(Year == "22")) #493
 nrow(merged_met_clinical_hilic %>% filter(Year == "28")) #493
 
-## Subset for only 125 ids
-merged_met_clinical_hilic <- merged_met_clinical_hilic[which(merged_met_clinical_hilic$id %in% as.vector(t_data_met_clinical_hilic[t_data_met_clinical_hilic$Year == "7","id"])),]
+## Subset for only 125 ids!!!!!!!!!!!!!!!!
+merged_met_clinical_hilic <- merged_met_clinical_hilic[which(merged_met_clinical_hilic$id %in% as.vector(t_data_met_clinical_hilic[t_data_met_clinical_hilic$Year == "22","id"])),]
 dim(merged_met_clinical_hilic)
 # [1] 500 752
 
@@ -414,9 +425,11 @@ dim(merged_met_clinical_hilic)
 
 # Met data standardization: by metabolite and (not by year: delete group_by(Year) %>% )
 merged_met_clinical_hilic<- merged_met_clinical_hilic %>% 
+  group_by(Year) %>% 
   mutate_at(Met_name, ~(as.numeric(.) %>% as.vector))  %>% 
   mutate_at(Met_name, ~(log(. + 1, base = 2) %>% as.vector))%>% 
-  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) 
+  mutate_at(Met_name,  ~(scale(.) %>% as.vector)) %>% 
+  ungroup()
 
 # impute PFAS value below LOD
 d_subset$pfoa_0<- ifelse(d_subset$pfoa_0 < 0.03, 0.03/sqrt(2), d_subset$pfoa_0)
@@ -514,7 +527,7 @@ dim(merged_met_clinical_hilic[merged_met_clinical_hilic$Year == 22,(colnames(mer
 dim(merged_met_clinical_hilic[merged_met_clinical_hilic$Year == 28,(colnames(merged_met_clinical_hilic) %in% Met_name)])
 #[1]  125 1107
 
-write.csv(merged_met_clinical_hilic, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", row.names = F)
+# write.csv(merged_met_clinical_hilic, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/merged_omics_hilic.csv", row.names = F)
 
 
 

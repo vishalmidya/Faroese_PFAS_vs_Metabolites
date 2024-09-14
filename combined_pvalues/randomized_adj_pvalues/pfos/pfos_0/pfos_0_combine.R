@@ -110,4 +110,8 @@ end.time <- Sys.time()
 stopCluster(cl)
 
 
+pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/pfas_met_tab_all.csv", check.names = F)
 
+pfhxs_0<- pfas_met_tab_all %>% 
+          filter(PFAS == "PFHxS" & PFAS_age == 0)
+pfhxs_0$FDR<- p.adjust(pfhxs_0$simu_pval, "fdr")

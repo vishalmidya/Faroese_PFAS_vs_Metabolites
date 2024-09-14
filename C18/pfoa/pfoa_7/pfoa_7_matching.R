@@ -25,9 +25,9 @@ f + labs(x= "Standardized Mean Difference") + geom_vline(xintercept  = 0.1 , lin
 
 
 #---------------------------  at age 14
-m.out1.pfoa7_age14 <- matchit(cpfoa7 ~  mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age14,
+m.out1.pfoa7_age14 <- matchit(cpfoa7 ~ mbmi  + smokepreg_2 + cmatfishpreg  + cparity,
                               data = merged_omics[merged_omics$Year == 14,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.5)
+                              distance = "glm", caliper = 0.8)
 
 summary(m.out1.pfoa7_age14)
 f <- love.plot(m.out1.pfoa7_age14)
@@ -35,9 +35,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 22
-m.out1.pfoa7_age22 <- matchit(cpfoa7 ~ sex + mage + mbmi  + smokepreg_2  + cparity, 
+m.out1.pfoa7_age22 <- matchit(cpfoa7 ~ sex + mbmi  + smokepreg_2  + cparity, 
                               data = merged_omics[merged_omics$Year == 22,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.1)
+                              distance = "glm", caliper = 0.8)
 
 summary(m.out1.pfoa7_age22)
 f <- love.plot(m.out1.pfoa7_age22)
@@ -45,9 +45,9 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfoa7_age28 <- matchit(cpfoa7 ~ sex + mage  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
+m.out1.pfoa7_age28 <- matchit(cpfoa7 ~ sex + mage  + smokepreg_2  + cparity, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
-                              distance = "glm", caliper = 0.5)
+                              distance = "glm", caliper = 0.2)
 
 summary(m.out1.pfoa7_age28)
 f <- love.plot(m.out1.pfoa7_age28)

@@ -177,6 +177,9 @@ length(valid_colnames)/4      # 309  - year_id
 
 # Metabolites data filtering
 
+
+
+################################################################################
 ## 1. confirmed metabolites
 
 ### a). import confirmed metabolites, with additional metabolites
@@ -301,6 +304,13 @@ data_c18 <- median_sum_feature_c18[is.na(median_sum_feature_c18$Metabolite_multi
 data_c18$Met_id <- paste0("Met",seq(1:nrow(data_c18)))
 
 
+################################################################################
+
+
+
+
+
+################################################################################
 # restrict to only original confirmed metabolites and annotate with closest confirmed metabolite!!!!!!!!!!!!!!!!!!!!!
 conf_met_org$mz_ratio <- rep(NA_real_, nrow(conf_met_org))
 conf_met_org$adduct <- rep(NA_character_, nrow(conf_met_org))
@@ -357,7 +367,7 @@ length(data_c18[is.na(data_c18$Metabolite) == FALSE, ]$Metabolite)
 data_c18 <- data_c18[is.na(data_c18$Metabolite) == FALSE,]
 
 dim(data_c18) 
-# [1] 326 1240
+# [1] 326 1241
 
 # data_c18 %>% dplyr::select(mz, time, Metabolite,Met_id)
 
@@ -402,7 +412,7 @@ nrow(merged_met_clinical_c18 %>% filter(Year == "14"))
 nrow(merged_met_clinical_c18 %>% filter(Year == "22")) #492
 nrow(merged_met_clinical_c18 %>% filter(Year == "28")) #493
 
-## Subset for only 125 ids
+## !!!!!!!!!!!!!!!!!!!! Subset for only 125 ids (also keep another one with all eligible ids)
 merged_met_clinical_c18 <- merged_met_clinical_c18[which(merged_met_clinical_c18$id %in% as.vector(t_data_met_clinical_c18[t_data_met_clinical_c18$Year == "7","id"])),]
 dim(merged_met_clinical_c18)
 # [1] 500 359

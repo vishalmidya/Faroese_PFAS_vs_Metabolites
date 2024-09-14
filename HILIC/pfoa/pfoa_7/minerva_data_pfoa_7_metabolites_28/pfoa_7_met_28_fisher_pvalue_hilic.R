@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_hilic <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/data_hilic.csv", check.names = F)
-m.out1.pfoa_7_age28.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_28/matched_data_pfoa_at_7_met_at_28.csv")
+data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
+m.out1.pfoa_7_age28.matched <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfoa/pfoa_7/minerva_data_pfoa_7_metabolites_28/matched_data_pfoa_at_7_met_at_28.csv")
 
 met_name<- data_hilic$Met_id
 

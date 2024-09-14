@@ -15,8 +15,8 @@ registerDoParallel(cl)
 
 start.time <- Sys.time()
 
-data_hilic <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/data_hilic.csv", check.names = F)
-m.out1.pfda_0_age7.matched <- read.csv("/sc/arion/projects/Faroese/pfas_met/hilic/pfda/pfda_0/minerva_data_pfda_0_metabolites_7/matched_data_pfda_at_0_met_at_7.csv")
+data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
+m.out1.pfda_0_age7.matched <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/pfda/pfda_0/minerva_data_pfda_0_metabolites_7/matched_data_pfda_at_0_met_at_7.csv")
 
 met_name<- data_hilic$Met_id
 
@@ -40,11 +40,12 @@ oper <- foreach(i=1:nrow(data.pfda_0.met_at_7), .combine='comb', .multicombine=T
                   exposure <- met_name[i]
                   model <- (lm(data[,i] ~ cpfda0 + sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, data = data))
                   s <- summary(model)
-                  list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"])
+                  list(s$coefficients[2,"Estimate"], s$coefficients[2,"Pr(>|t|)"], s$coefficients[2,"Std. Error"]) #!!!!!!!!!!!!!!!
                 }
 
 data.pfda_0.met_at_7$beta <- unlist(oper[[1]])
 data.pfda_0.met_at_7$model_pval <- unlist(oper[[2]])
+data.pfda_0.met_at_7$std.error <- unlist(oper[[3]])#!!!!!!!!!!!!!!!!!!!!
 observed_test_stat <- unlist(oper[[1]])
 
 

@@ -64,12 +64,12 @@ library(patchwork)
 data_hilic <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/HILIC/data_hilic.csv", check.names = F)
 data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/C18/data_c18.csv", check.names = F)
 
-pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/pfas_met_tab_all.csv", check.names = F)
+pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/pfas_met_tab_all.csv", check.names = F)
 
 ## AGE 0
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met258" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met109" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "C18")| 
-                                    (pfas_met_tab_all$Met_id == "Met580" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "C18"),]
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met36" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "C18")| 
+                                    (pfas_met_tab_all$Met_id == "Met258" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC")| 
+                                    (pfas_met_tab_all$Met_id == "Met8" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "C18"),]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "0", ]
 
 dim(pfas_met_tab)
@@ -81,8 +81,9 @@ pfas0 <- pfas_met_tab
 
 ## AGE 7
 
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met192" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met389" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode == "HILIC") ,]
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met322" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode == "HILIC") | 
+                                    (pfas_met_tab_all$Met_id == "Met5" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") | 
+                                    (pfas_met_tab_all$Met_id == "Met259" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode == "HILIC") ,]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "7", ]
 
 dim(pfas_met_tab)
@@ -95,8 +96,7 @@ pfas7 <- pfas_met_tab
 
 ## AGE 14
 
-pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met793" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                    (pfas_met_tab_all$Met_id == "Met438" & pfas_met_tab_all$PFAS == "PFNA" & pfas_met_tab_all$Mode =="C18"),]
+pfas_met_tab <- pfas_met_tab_all [(pfas_met_tab_all$Met_id == "Met895" & pfas_met_tab_all$PFAS == "PFHxS" & pfas_met_tab_all$Mode =="HILIC") ,]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "14", ]
 dim(pfas_met_tab)
 pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("22","28"))
@@ -107,19 +107,8 @@ pfas14 <- pfas_met_tab
 
 ## AGE 22
 
-pfas_met_tab <- pfas_met_tab_all[(pfas_met_tab_all$Met_id == "Met190" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met260" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met267" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") |
-                                   (pfas_met_tab_all$Met_id == "Met348" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met583" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met780" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met262" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met610" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met742" & pfas_met_tab_all$PFAS == "PFOS" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met79" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC")|
-                                   (pfas_met_tab_all$Met_id == "Met86" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met886" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="HILIC") | 
-                                   (pfas_met_tab_all$Met_id == "Met219" & pfas_met_tab_all$PFAS == "PFOA" & pfas_met_tab_all$Mode =="C18"),]
+pfas_met_tab <- pfas_met_tab_all[(pfas_met_tab_all$Met_id == "Met434" & pfas_met_tab_all$PFAS == "PFHxS" & pfas_met_tab_all$Mode =="C18")| 
+                                   (pfas_met_tab_all$Met_id == "Met780" & pfas_met_tab_all$PFAS == "PFDA" & pfas_met_tab_all$Mode =="HILIC")  ,]
 pfas_met_tab<- pfas_met_tab[pfas_met_tab$PFAS_age == "22", ]
 
 dim(pfas_met_tab)
@@ -132,7 +121,7 @@ pfas22 <- pfas_met_tab
 all_sig_hits <- rbind(pfas0,pfas7,pfas14,pfas22)
 
 
-# write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_longitudinal.csv", row.names = F )
+write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/sig_metabolites_longitudinal_0.3.csv", row.names = F )
 
 
 #################################################################################
@@ -143,14 +132,14 @@ all_sig_hits <- rbind(pfas0,pfas7,pfas14,pfas22)
 
 ##### Figure
 
-all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_longitudinal.csv")
+all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/sig_metabolites_longitudinal_0.3.csv")
 all_sig_hits$Age <- factor(all_sig_hits$Age,
                            levels = c(7, 14, 22, 28))
 
 all_sig_hits$PFAS<-factor(all_sig_hits$PFAS,
                           levels=c("PFOS" ,"PFOA" ,"PFNA" ,"PFDA" ,"PFHxS"))
 
-all_sig_hits$sig<-factor(ifelse(all_sig_hits$rand_adj_pval<0.2, 1, 0),
+all_sig_hits$sig<-factor(ifelse(all_sig_hits$rand_adj_pval<0.3, 1, 0),
                          levels = c(0,1))
 
 ## AGE 0
@@ -165,28 +154,28 @@ vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 0,], aes(x=Age, y=beta, col
         + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
           labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
                title = "Prenatal PFAS exposure and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 7, family = 'serif',
+        +  geom_label_repel(size = 9, family = 'serif',
                             fontface = 'italic',
                             box.padding = unit(0.5, "lines"),
                             max.iter = 2e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                            max.overlaps = getOption("ggrepel.max.overlaps", default = 60),
                             force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+vol <-  (vol + theme(plot.title=element_text(size=20,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=18,face="bold"),
+                     axis.text.x = element_text(size=18,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1))
+         + ylim(c(-1.2,1.2))
          + annotate("rect", xmin = c(0.75, 1.75, 2.75, 3.75), 
                     xmax = c(1.25, 2.25, 3.25, 4.25), 
-                    ymin = c(-1, -1, -1, -1), ymax =rep(1,4),
+                    ymin = rep(-1.2, 4), ymax =rep(1.2,4),
                     alpha = 0.05)
          + guides(color = guide_legend(override.aes = list(size = 4)),
                   shape = guide_legend(override.aes = list(size = 4))))
@@ -206,21 +195,21 @@ vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 7,], aes(x=Age, y=beta, col
         + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
           labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
                title = "PFAS exposure at age 7 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 7, family = 'serif',
+        +  geom_label_repel(size = 9, family = 'serif',
                             fontface = 'italic',
                             box.padding = unit(0.5, "lines"),
                             max.iter = 1e4,
                             max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
                             force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+vol <-  (vol + theme(plot.title=element_text(size=20,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=18,face="bold"),
+                     axis.text.x = element_text(size=18,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
@@ -250,21 +239,21 @@ vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 14,], aes(x=Age, y=beta, co
           
           labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
                title = "PFAS exposure at age 14 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 7, family = 'serif',
+        +  geom_label_repel(size = 9, family = 'serif',
                             fontface = 'italic',
                             box.padding = unit(0.5, "lines"),
                             max.iter = 2e4,
                             max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
                             force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+vol <-  (vol + theme(plot.title=element_text(size=20,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=18,face="bold"),
+                     axis.text.x = element_text(size=18,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
@@ -293,21 +282,21 @@ vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 22,], aes(x=Age, y=beta, co
         + geom_hline(yintercept= 0, color = "black", size = 1, ) + 
           labs(x = "Age at metabolomic assessment", y = "Beta Coefficients", 
                title = "PFAS exposure at age 22 and associated metabolites") + theme_bw()
-        +  geom_label_repel(size = 7, family = 'serif',
+        +  geom_label_repel(size = 9, family = 'serif',
                             fontface = 'italic',
                             box.padding = unit(0.5, "lines"),
                             max.iter = 2e4,
                             max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
                             force = 2, force_pull = 2, show.legend = F))
 
-vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
-                     axis.title=element_text(size=14,face="bold"),
-                     plot.tag = element_text(size = 14,face = "bold"),
-                     axis.text.y = element_text(size=14,face="bold"),
-                     axis.text.x = element_text(size=14,face="bold"),
+vol <-  (vol + theme(plot.title=element_text(size=20,face="bold"),
+                     axis.title=element_text(size=18,face="bold"),
+                     plot.tag = element_text(size = 18,face = "bold"),
+                     axis.text.y = element_text(size=18,face="bold"),
+                     axis.text.x = element_text(size=18,face="bold"),
                      strip.text.y = element_text(hjust=0,vjust = 1,angle=180,face="bold"),
                      legend.title = element_text(face = "bold"), legend.position = 'bottom',
-                     legend.text = element_text(size = 12),
+                     legend.text = element_text(size = 18),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
@@ -327,7 +316,7 @@ vol_22
 # write.csv(df, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/New_faroese/sig_metabolites.csv", row.names = F )
 
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/all_modes_all_metabolites_longitudinal_order.jpeg",
+jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/all_modes_all_metabolites_longitudinal_order_0.2.jpeg",
      units="in", width=24, height=28, res=600)
 
 layout<- c(
@@ -342,7 +331,7 @@ plot1<- vol_0 + vol_7 + vol_14 + vol_22 +
               guides='collect',
   )+
   plot_annotation(title="Prospective associations between individual PFAS exposure and metabolic alterations throughout life-course",
-                  theme = list(plot.title=element_text(size=20,face="bold"))) &
+                  theme = list(plot.title=element_text(size=25,face="bold"))) &
   theme(legend.position='bottom')
 plot1
 

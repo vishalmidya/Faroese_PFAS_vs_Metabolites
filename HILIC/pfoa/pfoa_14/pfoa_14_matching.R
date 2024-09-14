@@ -34,7 +34,7 @@ f + labs(title  = " ", x= "Standardized Mean Difference") + geom_vline(xintercep
 
 
 #---------------------------  at age 28
-m.out1.pfoa14_age28 <- matchit(cpfoa14 ~ sex + mage + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age28, 
+m.out1.pfoa14_age28 <- matchit(cpfoa14 ~ sex + mbmi  + smokepreg_2 + cmatfishpreg  + cparity, 
                               data = merged_omics[merged_omics$Year == 28,], discard = "both", method = "full", 
                               distance = "glm", caliper = 0.05)
 

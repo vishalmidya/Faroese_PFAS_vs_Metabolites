@@ -14,7 +14,7 @@ merged_omics <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/Ne
 
 ## matching
 #---------------------------  at age 7
-m.out1.pfhxs0_age7 <- matchit(cpfhxs0 ~  sex + mbmi  + smokepreg_2 + cmatfishpreg  + cparity + age7, 
+m.out1.pfhxs0_age7 <- matchit(cpfhxs0 ~  sex  + smokepreg_2 + cmatfishpreg  + cparity + age7, 
                              data = merged_omics[merged_omics$Year == 7,], discard = "both", method = "full",
                              distance = "glm", caliper = 0.8)
 

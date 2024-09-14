@@ -68,8 +68,8 @@ data_c18 <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_fa
 
 ###### AGE 0
 
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_0_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_0_metabolites_all_HILIC.txt", header = T)
+pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\500\\pfas_0_metabolites_all_C18.txt", header = T)
+pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\500\\pfas_0_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
                    inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id") ########## annotate metabolites
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
@@ -81,8 +81,8 @@ pfas_met_tab_0$PFAS_age <- rep("0", nrow(pfas_met_tab_0))
 
 ###### AGE 7
 
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_7_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_7_metabolites_all_HILIC.txt", header = T)
+pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\500\\pfas_7_metabolites_all_C18.txt", header = T)
+pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\500\\pfas_7_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
                    inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
@@ -93,8 +93,8 @@ pfas_met_tab_7$PFAS_age <- rep("7", nrow(pfas_met_tab_7))
 
 ###### AGE 14
 
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_14_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_14_metabolites_all_HILIC.txt", header = T)
+pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\500\\pfas_14_metabolites_all_C18.txt", header = T)
+pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\500\\pfas_14_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
                    inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
@@ -106,8 +106,8 @@ pfas_met_tab_14$PFAS_age <- rep("14", nrow(pfas_met_tab_14))
 
 ###### AGE 22
 
-pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\pfas_22_metabolites_all_C18.txt", header = T)
-pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\pfas_22_metabolites_all_HILIC.txt", header = T)
+pfas_met_tab_C18 <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\C18\\500\\pfas_22_metabolites_all_C18.txt", header = T)
+pfas_met_tab_HILIC <- read.table("C:\\Users\\yaom03\\OneDrive - The Mount Sinai Hospital\\New_faroese\\HILIC\\500\\pfas_22_metabolites_all_HILIC.txt", header = T)
 pfas_met_tab_C18<- pfas_met_tab_C18 %>% 
                    inner_join(data_c18[, c("Met_id", "Metabolite", "Metabolite_multiple")], by = "Met_id")
 pfas_met_tab_HILIC<- pfas_met_tab_HILIC %>% 
@@ -127,14 +127,14 @@ for(i in 1:nrow(pfas_met_tab_all)){
 }
 
 
-write.csv(pfas_met_tab_all, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/pfas_met_tab_all.csv", row.names = F )
+write.csv(pfas_met_tab_all, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/pfas_met_tab_all.csv", row.names = F )
 
 ##################################################################################################################################################################
 pfas_met_tab_all <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/pfas_met_tab_all.csv", check.names = F)
 
 ## AGE 0
 
-pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$rand_adj_pval < 0.2 & pfas_met_tab_all$PFAS_age == "0",]
+pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$fdr < 0.3 & pfas_met_tab_all$PFAS_age == "0",]
 dim(pfas_met_tab)
 pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("7","14","22","28"))
 
@@ -154,7 +154,7 @@ pfas0 <- pfas_met_tab
 
 ## AGE 7
 
-pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$rand_adj_pval < 0.2 & pfas_met_tab_all$PFAS_age == "7",]
+pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$fdr < 0.3 & pfas_met_tab_all$PFAS_age == "7",]
 dim(pfas_met_tab)
 pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("14","22","28"))
 
@@ -173,7 +173,7 @@ pfas7 <- pfas_met_tab
 
 ## AGE 14
 
-pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$rand_adj_pval < 0.2 & pfas_met_tab_all$PFAS_age == "14",]
+pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$fdr < 0.3 & pfas_met_tab_all$PFAS_age == "14",]
 dim(pfas_met_tab)
 pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("22","28"))
 
@@ -191,7 +191,7 @@ pfas14 <- pfas_met_tab
 
 ## AGE 22
 
-pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$rand_adj_pval < 0.2 & pfas_met_tab_all$PFAS_age == "22",]
+pfas_met_tab <- pfas_met_tab_all[pfas_met_tab_all$fdr < 0.3 & pfas_met_tab_all$PFAS_age == "22",]
 dim(pfas_met_tab)
 pfas_met_tab$Age <- factor(pfas_met_tab$Age, levels = c("28"))
 
@@ -207,10 +207,10 @@ table(pfas_met_tab$Age)
 pfas22 <- pfas_met_tab
 
 all_sig_hits <- rbind(pfas0,pfas7,pfas14,pfas22)
-all_sig_hits <- all_sig_hits[,c("Metabolite","Metabolite_multiple","mz","time","beta","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval")]
+all_sig_hits <- all_sig_hits[,c("Metabolite","Metabolite_multiple","mz","time","beta","PFAS","Age","PFAS_age","Mode","Met_id","simu_pval","rand_adj_pval","fdr")]
 
 
-write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_closest.csv", row.names = F )
+write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_closest_fdr0.3.csv", row.names = F )
 
 ##################################################################################################################################################################
 # Annotations
@@ -305,7 +305,7 @@ write.csv(all_sig_hits, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New
 
 ##### Figure
 
-all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites_closest.csv")
+all_sig_hits <- read.csv("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/sig_metabolites_closest_0.3.csv")
 all_sig_hits$Age <- factor(all_sig_hits$Age,
                            levels = c(7, 14, 22, 28))
 
@@ -346,10 +346,10 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                      legend.background = element_rect(fill="white", 
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
-         + ylim(c(-1,1))
-         + annotate("rect", xmin = c(0.75, 1.75), 
-                    xmax = c(1.25, 2.25), 
-                    ymin = c(-1, -1), ymax =rep(1,2),
+         + ylim(c(-1.2,1.2))
+         + annotate("rect", xmin = c(0.75, 1.75, 2.75), 
+                    xmax = c(1.25, 2.25, 3.25), 
+                    ymin = rep(-1.2, 3), ymax =rep(1.2,3),
                     alpha = 0.05)
          + guides(color = guide_legend(override.aes = list(size = 4)),
                   shape = guide_legend(override.aes = list(size = 4))))
@@ -387,10 +387,10 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
                                                       size=0.5, linetype="solid",  colour ="darkblue"),
                      plot.margin=unit(c(0.5,0.5,1,0.5), "cm")) 
          + ylim(c(-1,1.3))
-         + annotate("rect", xmin = c(0.75, 1.75), 
-                    xmax = c(1.25, 2.25), 
-                    ymin = c(-1, -1), 
-                    ymax =rep(1.2,2),
+         + annotate("rect", xmin = c(0.75), 
+                    xmax = c(1.25), 
+                    ymin = c(-1), 
+                    ymax =rep(1.2,1),
                     alpha = 0.05)
          + guides(color = guide_legend(override.aes = list(size = 4)),
                   shape = guide_legend(override.aes = list(size = 4))))
@@ -415,7 +415,7 @@ vol <- (ggplot(all_sig_hits[all_sig_hits$PFAS_age == 14,], aes(x=Age, y=beta, co
                             fontface = 'italic',
                             box.padding = unit(0.5, "lines"),
                             max.iter = 2e4,
-                            max.overlaps = getOption("ggrepel.max.overlaps", default = 40),
+                            max.overlaps = getOption("ggrepel.max.overlaps", default = 60),
                             force = 2, force_pull = 2, show.legend = F))
 
 vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
@@ -432,8 +432,7 @@ vol <-  (vol + theme(plot.title=element_text(size=16,face="bold"),
          + ylim(c(-1,1))
          + annotate("rect", xmin = c(0.75), 
                     xmax = c(1.25), 
-                    ymin = c(-1), 
-                    ymax =c(1),
+                    ymin = c(-1), ymax = c(1),
                     alpha = 0.05)
          + guides(color = guide_legend(override.aes = list(size = 4)),
                   shape = guide_legend(override.aes = list(size = 4))))
@@ -487,7 +486,7 @@ vol_22
 # write.csv(df, "C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/sig_metabolites.csv", row.names = F )
 
 
-jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/all_modes_all_metabolites_closest.jpeg",
+jpeg("C:/Users/yaom03/OneDrive - The Mount Sinai Hospital/New_faroese/500/all_modes_all_metabolites_closest_0.3.jpeg",
      units="in", width=17, height=12, res=600)
 
 
